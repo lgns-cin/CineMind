@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+@import "tailwindcss";
+
+@tailwind utilities;
+
+@theme {
+  --color-cinemind-white: #efead0;
+  --color-cinemind-pink: #cf3259;
+  --color-cinemind-blue: #22bdff;
+  --color-cinemind-yellow: #ffb922;
+  --color-cinemind-light: #400e1e;
+  --color-cinemind-dark: #210102;
+
+  --font-cinemind-sans: "Josefin Sans", sans-serif;
+  --font-cinemind-serif: "EB Garamond", serif;
+}
