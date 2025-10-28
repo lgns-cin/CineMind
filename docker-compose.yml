@@ -1,0 +1,50 @@
+services:
+  frontend:
+    container_name: cinemind-frontend
+    build:
+      context: ./frontend
+    develop:
+      watch:
+        - action: sync
+          initial_sync: true
+          path: ./frontend
+          target: /cinemind/frontend
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+
+  backend:
+    container_name: cinemind-backend
+    build:
+      context: ./backend
+    develop:
+      watch:
+        - action: sync
+          initial_sync: true
+          path: ./backend
+          target: /cinemind/backend
+        - action: rebuild
+          path: Pipfile
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - database
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  database:
+    container_name: cinemind-database
+    image: postgres:15
+    env_file:
+      - ./backend/.env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  db-data:
