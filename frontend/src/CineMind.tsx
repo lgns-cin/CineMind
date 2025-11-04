@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/LoginPage";
+import Signup from "./pages/SignupPage";
 
 /**
  * O componente base renderizado na tela do site.
@@ -20,7 +21,7 @@ export default function CineMind() {
       />
       <Route
         path="/signup"
-        element={<div data-testid="signup-page" />}
+        element={<Signup data-testid="signup-page" />}
       />
       <Route
         path="/questionnaire"
