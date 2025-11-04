@@ -1,16 +1,40 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import test from "../../public/favicon.svg";
 import { useNavigate } from "react-router-dom";
+import {
+  isValidUsername,
+  isValidEmail,
+  isValidPassword
+} from "../utils/validators";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const [error, setError] = useState(""); // estado que controla mensagens de erro
 
   const navigate = useNavigate();
   const goToSignupPage = () => navigate("/signup");
-  const submitLoginData = () => {
-    if (username && password) navigate("/home"); // TODO: criar lógica de validação de usuário
+  // Lógica de submissão
+  const submitLoginData = (event: React.FormEvent) => {
+    event.preventDefault(); // impede o recarregamento padrão do form
+    setError(""); // reseta mensagens de erro a cada nova tentativa
+
+    // Validamos a senha (simples por enquanto)
+    const isPasswordValid = isValidPassword(password);
+    // Validamos o login (username OU email)
+    const isLoginValid = isValidUsername(username) || isValidEmail(username);
+
+    // Checa resultado
+    if (isLoginValid && isPasswordValid) {
+      // Sucesso
+      console.log("Credenciais válidas. Pronto para enviar para o backend");
+      // TODO: aqui faremos a chamada da API (Axios)
+      navigate("/home");
+    } else {
+      // Falha na validação
+      setError("Usuário ou senha inválidos. Verifique as credenciais.");
+    }
   };
 
   return (
