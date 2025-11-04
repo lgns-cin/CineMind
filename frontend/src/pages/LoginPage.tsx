@@ -57,7 +57,7 @@ export default function Login() {
     >
       <form
         className="
-          w-1/3 h-2/3 
+          w-1/3 h-2/3 justify-stretch items-center-safe
           grid grid-rows-5 gap-8 p-8
           bg-cinemind-pink rounded-lg
         "
