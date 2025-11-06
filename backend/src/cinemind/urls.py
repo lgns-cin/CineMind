@@ -17,21 +17,52 @@ Including another URLconf
 # cinemind/urls.py
 
 from django.contrib import admin
-from django.urls import path, include # Adicione 'include'
-# --- NOVAS IMPORTAÇÕES ---
+from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
-urlpatterns = [
+# Importar as views consolidadas dos apps
+from accounts import views as accounts_views
+from recommendations import views as recs_views
+
+# --- NOVAS ROTAS PLANAS DA API ---
+urlpatterns_api = [
+    # 1. POST /api/register/
+    path('api/register/', accounts_views.RegisterView.as_view(), name='api-register'),
+    
+    # 2. POST /api/login/
+    path('api/login/', accounts_views.LoginOnboardingView.as_view(), name='api-login'),
+    
+    # 3. POST /api/form/
+    path('api/form/', accounts_views.OnboardingFormSubmitView.as_view(), name='api-form-submit'),
+    
+    # 4. GET /api/moods/
+    path('api/moods/', recs_views.MoodListView.as_view(), name='api-mood-list'),
+    
+    # 5. POST /api/recommendations/
+    path('api/recommendations/', recs_views.GenerateRecommendationView.as_view(), name='api-recommendations'),
+    
+    # 6. GET /api/profile/
+    path('api/profile/', accounts_views.ProfileView.as_view(), name='api-profile'),
+]
+
+# --- ROTAS DE ADMIN E DOCUMENTAÇÃO ---
+urlpatterns_main = [
     path('admin/', admin.site.urls),
     
-    # Suas rotas da API que já existem
-    path('api/accounts/', include('accounts.urls')),
-    path('api/recommendations/', include('recommendations.urls')),
-
     # --- ROTAS ADICIONAIS PARA DOCUMENTAÇÃO ---
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    # Opção 1: Documentação interativa com Swagger UI (mais popular)
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    # Opção 2: Documentação visual com ReDoc (alternativa)
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-]#
+]
+
+# --- ROTAS ANTIGAS (AGORA VAZIAS) ---
+# Deixamos os includes para não quebrar a estrutura, mas os arquivos estarão vazios
+urlpatterns_deprecated = [
+    path('api/accounts/', include('accounts.urls')),
+    path('api/recommendations/', include('recommendations.urls')),
+]
+
+urlpatterns = urlpatterns_main + urlpatterns_api
+
+# Nota: As urlpatterns_deprecated são intencionalmente omitidas da lista final
+# para desativar as rotas antigas.
