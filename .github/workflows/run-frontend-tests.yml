@@ -1,9 +1,11 @@
 name: "Front-end: Executar testes"
 
+# Executa quando pushes ou pull requests são feitos a "main" ou "dev",
+# mas apenas se o código na pasta frontend mudar.
 on:
   push:
     paths:
-      - "frontend/**" # Executa apenas se o código na pasta frontend/ mudar
+      - "frontend/**"
 
     branches:
       - "main"
@@ -11,7 +13,7 @@ on:
 
   pull_request:
     paths:
-      - "frontend/**" # Executa apenas se o código na pasta frontend/ mudar
+      - "frontend/**"
 
     branches:
       - "main"
@@ -19,7 +21,7 @@ on:
 
 jobs:
   build-and-test:
-    name: "Criar build do Docker"
+    name: "Buildar e testar"
     runs-on: "ubuntu-latest"
 
     steps:
@@ -30,10 +32,7 @@ jobs:
         run: "docker compose build frontend"
 
       - name: "Iniciar container"
-        run: "docker compose up frontend"
+        run: "docker compose up frontend -d"
 
       - name: "Executar testes"
         run: "docker exec cinemind-frontend npm run test"
-
-      - name: "Terminar execução e remover containers"
-        run: "docker compose down"
