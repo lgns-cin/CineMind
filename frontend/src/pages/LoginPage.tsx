@@ -48,24 +48,22 @@ export default function Login() {
 
     try {
       // Tenta fazer a requisição de login
-      // NOTA: Confirmar com o backend se o endpoint é o mesmo "/login"
-      const response = await api.post("/login", {
+      const response = await api.post("/api/login/", {
         username: username,
         password: password
       });
 
-      // Sucesso
-      setIsLoading(false); // Reabilita o botão de login
-      console.log("API respondeu: ", response.data);
+      const data = response.data[0];
 
-      // TODO: Salvar o token que o backend enviar (ex: response.data.token)
-      // localStorage.setItem("token", response.data.token);
+      localStorage.setItem("cinemind/access_token", data.access_token);
 
-      navigate("/home"); // Navega para home
+      if (!data.onboarding_status) {
+        navigate("/home"); // Navega para home
+      } else {
+        // TODO: salvar data.questions e data.genres para uso na página de questionário
+        navigate("/questionnaire");
+      }
     } catch (apiError: any) {
-      // Falha na requisição
-      setIsLoading(false); // Reabilita o botão de login
-
       if (apiError.response && apiError.response.status === 401) {
         // Erro 401 (Não autorizado) - Usuário ou senha incorretos
         setError("Credenciais incorretas. Tente novamente.");
@@ -74,6 +72,8 @@ export default function Login() {
         setError("Erro ao conectar ao servidor. Tente novamente mais tarde.");
       }
       console.error("Erro no login: ", apiError);
+    } finally {
+      setIsLoading(false);
     }
   };
 
