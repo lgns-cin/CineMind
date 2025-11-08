@@ -1,0 +1,39 @@
+name: "Front-end: Executar testes"
+
+on:
+  push:
+    paths:
+      - "frontend/**" # Executa apenas se o código na pasta frontend/ mudar
+
+    branches:
+      - "main"
+      - "dev"
+
+  pull_request:
+    paths:
+      - "frontend/**" # Executa apenas se o código na pasta frontend/ mudar
+
+    branches:
+      - "main"
+      - "dev"
+
+jobs:
+  build-and-test:
+    name: "Criar build do Docker"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Fazer checkout no repositório"
+        uses: "actions/checkout@v5"
+
+      - name: "Executar build da imagem do front-end"
+        run: "docker compose build frontend"
+
+      - name: "Iniciar container"
+        run: "docker compose up frontend"
+
+      - name: "Executar testes"
+        run: "docker exec cinemind-frontend npm run test"
+
+      - name: "Terminar execução e remover containers"
+        run: "docker compose down"
