@@ -16,17 +16,18 @@ class AccountService:
         Processa as respostas do questionário, calcula os scores do Big Five
         e salva no perfil do usuário.
         
-        --- CORRIGIDO vFINAL (Aceita 'validated_data' Aninhado) ---
+        --- CORRIGIDO ---
+        Esta função agora espera a estrutura 'flat' vinda do AnswerSerializer:
+        [ {'question_id': <UUID>, 'selected_value': 1}, ... ]
         """
         
         # 1. Validar as questões
-        # O Serializer entrega: [{'question': {'id': UUID(...)}, 'selected_value': 1.0}, ...]
-        # Note: o 'id' já é um objeto UUID, não uma string.
-        question_ids = [answer['question']['id'] for answer in answers_data]
+        # --- CORREÇÃO ---: Acessa 'question_id' diretamente.
+        question_ids = [answer['question_id'] for answer in answers_data]
         
         questions = Question.objects.filter(id__in=question_ids)
 
-        # Criamos o mapa de busca usando OBJETOS UUID como chaves
+        # Criamos o mapa de busca (isto estava correto)
         questions_map_uuid_keys = {q.id: q for q in questions}
 
         if len(questions_map_uuid_keys) != len(answers_data):
@@ -39,10 +40,10 @@ class AccountService:
         }
 
         for answer in answers_data:
-            # Acessa o ID aninhado (que é um objeto UUID)
-            question_id_uuid = answer['question']['id']
+            # --- CORREÇÃO ---: Acessa 'question_id' diretamente.
+            question_id_uuid = answer['question_id']
             
-            # Buscamos o objeto Question usando o objeto UUID como chave
+            # Buscamos o objeto Question
             question = questions_map_uuid_keys[question_id_uuid] 
             scores[question.attribute] += answer['selected_value']
 
@@ -50,8 +51,8 @@ class AccountService:
         try:
             with transaction.atomic():
                 for answer_data in answers_data:
-                    # Acessa o ID aninhado (objeto UUID)
-                    question_id_uuid = answer_data['question']['id']
+                    # --- CORREÇÃO ---: Acessa 'question_id' diretamente.
+                    question_id_uuid = answer_data['question_id']
                     
                     # Buscamos o objeto Question novamente
                     question_object = questions_map_uuid_keys[question_id_uuid] 
@@ -71,7 +72,8 @@ class AccountService:
                 profile.save()
 
         except Exception as e:
+            # --- MELHORIA ---: Propaga o erro real para o log
             print(f"Erro ao salvar respostas e perfil: {e}")
-            raise RuntimeError("Ocorreu um erro ao processar suas respostas.")
+            raise RuntimeError(f"Ocorreu um erro ao processar suas respostas. Erro: {e}")
 
         return scores
