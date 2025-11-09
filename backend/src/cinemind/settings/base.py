@@ -158,3 +158,12 @@ SIMPLE_JWT = {
 # ATENÇÃO: Isto permitirá que QUALQUER domínio acesse sua API.
 # Use com cuidado e garanta que suas rotas estão devidamente protegidas.
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+# --- CONFIGURAÇÃO DO PROVEDOR DE IA (LLM) ---
+# Define qual provedor de IA será usado no sistema.
+# Opções válidas: 'gemini', 'openai'
+ACTIVE_LLM_PROVIDER = os.getenv('ACTIVE_LLM_PROVIDER', 'gemini')
+
+# Chave de API da OpenAI (necessária se ACTIVE_LLM_PROVIDER = 'openai')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', None)
