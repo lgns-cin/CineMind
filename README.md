@@ -24,7 +24,8 @@ O curso requer que equipes formadas aleatoriamente desenvolvam um sistema integr
 
 1. [Visão Geral](#visão-geral)
 2. [Funcionalidades Técnicas](#funcionalidades-técnicas)
-3. [Como Contribuir](#como-contribuir)
+3. [Documentação Técnica](#documentação-técnica)
+4. [Como Contribuir](#como-contribuir)
 
 ## Visão Geral
 
@@ -58,7 +59,9 @@ A plataforma oferece um questionário para avaliar o perfil do usuário e, com b
 
   - A API é autodocumentada usando [_drf-spectacular_](https://drf-spectacular.readthedocs.io/en/latest), com [_Swagger UI_](https://swagger.io/tools/swagger-ui/) e [_ReDoc_](https://redocly.com).
 
-Verifique os arquivos `README.md` dentro de cada pasta em `services` para mais detalhes sobre estruturas e tecnologias usadas.
+## Documentação Técnica
+
+Verifique os arquivos [`frontend/README.md`](frontend/README.md) e [`backend/README.md`](backend/README.md) para mais detalhes sobre as estruturas e tecnologias usadas para o projeto.
 
 ## Como Contribuir
 
