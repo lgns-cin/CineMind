@@ -54,4 +54,6 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+    path("api/moods/", MoodListView.as_view(), name="mood-list"),
+    path("api/recommendations/generate/", GenerateRecommendationView.as_view(), name="generate-recommendations")
 ]
