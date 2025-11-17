@@ -1,0 +1,53 @@
+name: CI Pipeline (front-end)
+
+# ---------------- Como funciona? ----------------
+# Executa o linting e o testing do front-end quando
+# pull requests ou pushes são feitos à branch dev.
+#
+# Os pull requests devem afetar a pasta frontend/.
+#
+# Se uma das etapas retornar algum não-sucesso,
+# há uma falha, ex.: linting detectar algo causa erro
+
+on:
+  push:
+    paths:
+      - frontend/**
+
+    branches:
+      - dev
+
+  pull_request:
+    paths:
+      - frontend/**
+
+    branches:
+      - dev
+
+jobs:
+  test-frontend:
+    name: Testar front-end
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout @ CineMind
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          cache: npm
+          cache-dependency-path: ./frontend
+
+      - name: Building
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Linting
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Testing
+        working-directory: ./frontend
+        run: npm run test
