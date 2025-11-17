@@ -1,0 +1,61 @@
+name: CI Pipeline (back-end)
+
+# ---------------- Como funciona? ----------------
+# Executa o linting e o testing do back-end quando
+# pull requests ou pushes são feitos à branch dev.
+#
+# Os pull requests devem afetar a pasta backend/.
+#
+# Se uma das etapas retornar algum não-sucesso,
+# há uma falha, ex.: linting detectar algo causa erro
+
+on:
+  push:
+    paths:
+      - backend/**
+
+    branches:
+      - dev
+
+  pull_request:
+    paths:
+      - backend/**
+
+    branches:
+      - dev
+
+jobs:
+  test-backend:
+    name: Testar back-end
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout @ CineMind
+        uses: actions/checkout@v5
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
+
+      - name: Building
+        working-directory: ./backend
+        run: |
+          cat .env.example > .env
+          python -m pip install pipenv
+          python -m pipenv install --system --deploy --dev
+
+      # --- ETAPA DE LINTING COM RUFF --- #
+      # Explicação sobre os erros ignorados em --ignore:
+      # E402 - Ocorre quando imports não são declarados exclusivamente no topo do arquivo
+      # F401 - Import não utilizado
+      # F403 - Uso de imports genéricos (from ... import * )
+      # F405 - Uso de nomes indefinidos devido a um import genérico
+
+      # - name: Linting
+      #   working-directory: ./backend
+      #   run: python -m ruff check --output-format github --ignore E402,F401,F403,F405
+
+      - name: Testing
+        working-directory: ./backend
+        run: python -m pytest
