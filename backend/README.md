@@ -37,7 +37,8 @@ O projeto segue o seguinte formato:
       │   ├───┬accounts/
       │   │   ├───┬management/
       │   │   │   └───commands/
-      │   │   └───migrations/
+      │   │   ├───migrations/
+      │   │   └───tests/
       │   ├───┬cinemind/
       │   │   └───settings/
       │   ├───┬integrations/
@@ -45,12 +46,10 @@ O projeto segue o seguinte formato:
       │   │   ├───openai/
       │   │   └───tmdb/
       │   ├───┬recommendations/
-      │   │   └───migrations/
+      │   │   ├───migrations/
+      │   │   └───tests/
       │   ├───utils/
       │   └───manage.py
-      │
-      ├───┬test/
-      │   └───(...)
       │
       ├───build.sh
       ├───Dockerfile
@@ -71,6 +70,8 @@ O projeto segue o seguinte formato:
           - ...
         - `src/accounts/migrations/`
           - ...
+        - `src/accounts/tests/`
+          - ...
     - `src/cinemind/`
       - ...
         - `src/cinemind/settings/`
@@ -86,6 +87,8 @@ O projeto segue o seguinte formato:
     - `src/recommendations/`
       - ...
         - `src/recommendations/migrations/`
+          - ...
+        - `src/recommendations/tests/`
           - ...
     - `src/utils/`
       - ...
