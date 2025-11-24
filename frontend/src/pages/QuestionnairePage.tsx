@@ -39,7 +39,6 @@ export default function QuestionnairePage() {
 
   const handleAnswerQuestion = (value: number) => {
     const currentQuestion = questions[currentQuestionIndex];
-    incrementQuestionIndex();
 
     const newAnswer: AnswerSubmission = {
       question_id: currentQuestion.id,
@@ -48,7 +47,11 @@ export default function QuestionnairePage() {
 
     setAnswers(prev => [...prev, newAnswer]);
 
-    if (currentQuestionIndex >= questions.length) setPhase("genres");
+    if (currentQuestionIndex < questions.length - 1) {
+      incrementQuestionIndex();
+    } else {
+      setPhase("genres");
+    }
   };
 
   useEffect(() => {
@@ -136,7 +139,7 @@ export default function QuestionnairePage() {
               <div
                 className="bg-cinemind-pink h-2 rounded-full transition-all duration-300"
                 style={{
-                  width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
+                  width: `${(currentQuestionIndex / questions.length) * 100}%`
                 }}
               />
             </div>
@@ -171,7 +174,7 @@ export default function QuestionnairePage() {
               mt-12 px-12 py-4 rounded-full text-xl font-bold transition-all transform
               ${
                 selectedGenreIds.length > 0
-                  ? "bg-gradient-to-r from-cinemind-pink to-cinemind-yellow text-cinemind-dark hover:scale-105 shadow-lg shadow-cinemind-pink/20 cursor-pointer"
+                  ? "text-cinemind-dark hover:scale-105 shadow-lg shadow-cinemind-pink/20 cursor-pointer"
                   : "bg-cinemind-light text-cinemind-white/30 cursor-not-allowed"
               }
             `}
