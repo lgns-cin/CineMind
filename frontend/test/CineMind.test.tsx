@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import CineMind from "../src/CineMind";
 import { MemoryRouter } from "react-router-dom";
 
