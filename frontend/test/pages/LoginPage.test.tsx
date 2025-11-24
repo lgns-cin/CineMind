@@ -97,15 +97,13 @@ describe("Componente Login", () => {
 
     // Resultado mockado da chamada à API
     mockedAPI.post.mockResolvedValueOnce({
-      data: [
-        {
-          access_token: "token",
-          onboarding_status: {
-            questions: [],
-            genres: []
-          }
+      data: {
+        access_token: "token",
+        onboarding_status: {
+          questions: [],
+          genres: []
         }
-      ]
+      }
     });
 
     await act(async () => {
