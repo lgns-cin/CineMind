@@ -9,9 +9,12 @@ import {
   type AnswerSubmission
 } from "../services/onboarding";
 import { StorageKeys } from "../utils/constants";
+import api from "../services/api";
 
 export default function QuestionnairePage() {
   const navigate = useNavigate();
+  const goToLoginPage = () => navigate("/login");
+  const goToHomePage = () => navigate("/home");
 
   // Estados de Dados
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -20,47 +23,23 @@ export default function QuestionnairePage() {
 
   // Estados de Progresso
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<AnswerSubmission[]>([]);
+  const incrementQuestionIndex = () =>
+    setCurrentQuestionIndex(prev => prev + 1);
+
   const [selectedGenreIds, setSelectedGenreIds] = useState<string[]>([]);
 
+  const toggleGenre = (id: string) => {
+    setSelectedGenreIds(prev =>
+      prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]
+    );
+  };
+
+  const [answers, setAnswers] = useState<AnswerSubmission[]>([]);
   const [phase, setPhase] = useState<"questions" | "genres">("questions");
-
-  useEffect(() => {
-    // Busca dados passados pelo Login via LocalStorage
-    const loadDataFromStorage = () => {
-      try {
-        const storedData = localStorage.getItem(StorageKeys.ONBOARDING_DATA);
-
-        if (!storedData) {
-          // Se não houver dados, o usuário tentou acessar direto ou deu refresh sem persistência.
-          // Redireciona para login para pegar os dados novamente.
-          console.warn("Sem dados de onboarding. Redirecionando para login.");
-          navigate("/login");
-          return;
-        }
-
-        const parsedData = JSON.parse(storedData);
-
-        if (parsedData.questions && parsedData.genres) {
-          setQuestions(parsedData.questions);
-          setGenres(parsedData.genres);
-        } else {
-          throw new Error("Dados incompletos no storage.");
-        }
-      } catch (error) {
-        console.error("Erro ao ler dados locais:", error);
-        localStorage.removeItem(StorageKeys.ACCESS_TOKEN); // Força logout limpo
-        navigate("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadDataFromStorage();
-  }, [navigate]);
 
   const handleAnswerQuestion = (value: number) => {
     const currentQuestion = questions[currentQuestionIndex];
+    incrementQuestionIndex();
 
     const newAnswer: AnswerSubmission = {
       question_id: currentQuestion.id,
@@ -69,43 +48,62 @@ export default function QuestionnairePage() {
 
     setAnswers(prev => [...prev, newAnswer]);
 
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      setPhase("genres");
+    if (currentQuestionIndex >= questions.length) setPhase("genres");
+  };
+
+  useEffect(() => {
+    const storedData = localStorage.getItem(StorageKeys.ONBOARDING_DATA);
+
+    if (!storedData) {
+      // Se não houver dados, o usuário tentou acessar direto ou deu refresh sem persistência.
+      // Redireciona para login para pegar os dados novamente.
+      console.warn("Sem dados de onboarding. Redirecionando para login.");
+      goToLoginPage();
+      return;
     }
-  };
 
-  const toggleGenre = (id: string) => {
-    setSelectedGenreIds(prev =>
-      prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]
-    );
-  };
+    const parsedData = JSON.parse(storedData);
 
-  const handleSubmit = async () => {
+    if (parsedData.questions && parsedData.genres) {
+      setQuestions(parsedData.questions);
+      setGenres(parsedData.genres);
+    } else {
+      console.error("Erro ao ler dados locais: ", parsedData);
+      localStorage.removeItem(StorageKeys.ACCESS_TOKEN); // Força logout limpo
+      goToLoginPage();
+    }
+
+    setLoading(false);
+  }, [navigate]);
+
+  const submitQuestionnaireData = async () => {
+    /*
+    Esse código não é mais necessário, visto que o botão é desativado quando selectedGenreIds.length == 0
+
     if (selectedGenreIds.length === 0) {
       alert("Por favor, selecione pelo menos um gênero.");
       return;
     }
+    */
+    setLoading(true);
 
-    try {
-      setLoading(true);
-      await submitOnboardingForm({
+    await api
+      .post("/api/form/", {
         answers,
         genre_ids: selectedGenreIds
+      })
+      .then(response => {
+        console.log(response.data);
+        localStorage.removeItem(StorageKeys.ONBOARDING_DATA);
+        goToHomePage();
+      })
+      .catch(error => {
+        console.error("Erro ao enviar:", error);
+        alert("Erro ao salvar suas respostas. Tente novamente.");
+      })
+      .finally(() => {
+        setLoading(false);
       });
-
-      // Limpa os dados temporários, pois já finalizou
-      localStorage.removeItem("onboarding_data");
-
-      // Redireciona para o perfil/home
-      navigate("/profile");
-    } catch (error) {
-      console.error("Erro ao enviar:", error);
-      alert("Erro ao salvar suas respostas. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   if (loading) {
@@ -167,7 +165,7 @@ export default function QuestionnairePage() {
           />
 
           <button
-            onClick={handleSubmit}
+            onClick={submitQuestionnaireData}
             disabled={selectedGenreIds.length === 0}
             className={`
               mt-12 px-12 py-4 rounded-full text-xl font-bold transition-all transform
