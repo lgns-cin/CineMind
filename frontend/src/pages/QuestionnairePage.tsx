@@ -8,6 +8,7 @@ import {
   type Genre,
   type AnswerSubmission
 } from "../services/onboarding";
+import { StorageKeys } from "../utils/constants";
 
 export default function QuestionnairePage() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function QuestionnairePage() {
     // Busca dados passados pelo Login via LocalStorage
     const loadDataFromStorage = () => {
       try {
-        const storedData = localStorage.getItem("cinemind/onboarding_data");
+        const storedData = localStorage.getItem(StorageKeys.ONBOARDING_DATA);
 
         if (!storedData) {
           // Se não houver dados, o usuário tentou acessar direto ou deu refresh sem persistência.
@@ -48,7 +49,7 @@ export default function QuestionnairePage() {
         }
       } catch (error) {
         console.error("Erro ao ler dados locais:", error);
-        localStorage.removeItem("token"); // Força logout limpo
+        localStorage.removeItem(StorageKeys.ACCESS_TOKEN); // Força logout limpo
         navigate("/login");
       } finally {
         setLoading(false);

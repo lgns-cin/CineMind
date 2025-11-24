@@ -11,6 +11,7 @@ import ClosedLockIcon from "../assets/ClosedLockIcon";
 import SlashedEyeIcon from "../assets/SlashedEyeIcon";
 import InputBox from "../components/InputBox";
 import api from "../services/api"; // importação do serviço de API (Axios)
+import { StorageKeys } from "../utils/constants";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -53,15 +54,14 @@ export default function Login() {
       })
       .then(response => {
         const data = response.data;
-        console.log(data);
 
-        localStorage.setItem("cinemind/access_token", data.access_token);
+        localStorage.setItem(StorageKeys.ACCESS_TOKEN, data.access_token);
 
         if (!data.onboarding_status) {
           navigate("/home"); // Navega para home
         } else {
           localStorage.setItem(
-            "cinemind/onboarding_data",
+            StorageKeys.ONBOARDING_DATA,
             JSON.stringify(data.onboarding_status)
           );
           navigate("/questionnaire");
