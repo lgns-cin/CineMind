@@ -29,7 +29,7 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Runtime data
-package-lock.json
+# package-lock.json  -> comentei = O package-lock.json é essencial. Ele é a "receita exata" que garante que o container do Docker instale as exatas mesmas versões de todas as dependências (para evitar dívida técnica)
 
 # Dependency directories
 node_modules/

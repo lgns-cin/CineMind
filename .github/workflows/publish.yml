@@ -1,0 +1,64 @@
+name: CI/CD Pipeline
+
+# ---------------- Como funciona? ----------------
+# Quando um push é feito à branch main, o projeto
+# é buildado em imagens Docker que são exportadas
+# ao Docker Hub.
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  pipeline:
+    name: CI/CD Pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- BUILD --- #
+      - name: Checkout @ CineMind
+        uses: actions/checkout@v5
+
+      - name: Docker Compose
+        run: |
+          docker compose -p cinemind build
+          docker compose -p cinemind up -d
+
+      # --- VALIDAÇÃO --- #
+      - name: Linting (front-end)
+        run: docker exec cinemind-frontend npm run lint
+
+      - name: Linting (back-end)
+        run: docker exec cinemind-backend python -m ruff check --output-format github --ignore E402,F401,F403,F405
+
+      - name: Testing (front-end)
+        run: docker exec cinemind-frontend npm run test
+
+      - name: Testing (back-end)
+        run: docker exec cinemind-backend python -m pytest
+
+      # --- DOCKER HUB --- #
+      - name: Docker Hub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Tagging
+        run: |
+          docker image ls
+          docker tag cinemind-frontend ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:frontend
+          docker tag cinemind-backend ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:backend
+          docker tag postgres:15 ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:database
+
+      - name: Pushing
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:frontend
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:backend
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:database
+
+      # --- DEPLOYMENT --- #
+      - name: Deploying
+        run: echo TBD
+        # complete aqui
