@@ -1,4 +1,4 @@
-import type { Genre } from "../services/onboardingService";
+import type { Genre } from "../services/onboarding";
 
 interface GenreGridProps {
   genres: Genre[];
@@ -6,10 +6,14 @@ interface GenreGridProps {
   onToggle: (id: string) => void;
 }
 
-export default function GenreGrid({ genres, selectedIds, onToggle }: GenreGridProps) {
+export default function GenreGrid({
+  genres,
+  selectedIds,
+  onToggle
+}: GenreGridProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full max-w-4xl">
-      {genres.map((genre) => {
+      {genres.map(genre => {
         const isSelected = selectedIds.includes(genre.id);
         return (
           <button
