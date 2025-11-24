@@ -1,15 +1,16 @@
-// import axios from "axios"; // Comentamos a importação real
+import axios from "axios";
 
-// Criamos um objeto falso apenas para o projeto não quebrar ao tentar usar 'api.get' ou 'api.post'
-const api = {
-  create: () => api,
-  get: async () => ({ data: [] }),
-  post: async () => ({ data: {} }),
-  defaults: { headers: { common: {} } },
-  interceptors: {
-    request: { use: () => {} },
-    response: { use: () => {} }
+const api = axios.create({
+  baseURL: "http://localhost:8000/", // Endereço do backend no Docker/Local
+});
+
+// Interceptor para adicionar o Token automaticamente em todas as requisições
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-};
+  return config;
+});
 
 export default api;

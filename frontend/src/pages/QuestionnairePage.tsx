@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import QuestionItem from "../components/QuestionItem";
 import GenreGrid from "../components/GenreGrid";
 import {
-  fetchQuestions,
-  fetchGenres,
+  devLoginAndFetchData, // Usamos a nova função de login+fetch
   submitOnboardingForm,
   type Question,
   type Genre,
@@ -24,27 +23,32 @@ export default function QuestionnairePage() {
   const [answers, setAnswers] = useState<AnswerSubmission[]>([]);
   const [selectedGenreIds, setSelectedGenreIds] = useState<string[]>([]);
   
-  // Controle de fase: 'questions' ou 'genres'
   const [phase, setPhase] = useState<"questions" | "genres">("questions");
 
   useEffect(() => {
-    // Busca dados dos nossos serviços mockados
-    const loadData = async () => {
+    const initData = async () => {
       try {
-        const [questionsData, genresData] = await Promise.all([
-          fetchQuestions(),
-          fetchGenres(),
-        ]);
-        setQuestions(questionsData);
-        setGenres(genresData);
-      } catch (error) {
-        console.error("Falha ao carregar dados do onboarding:", error);
+        // --- CREDENCIAIS DE TESTE ---
+        // Certifique-se de que este usuário existe no seu banco local
+        // Você pode criá-lo via 'python src/manage.py createsuperuser' ou via registro da API
+        const USERNAME = "novo_usuario"; 
+        const PASSWORD = "uma_senha_forte_123";
+
+        console.log("Tentando autenticar e buscar dados reais do backend...");
+        
+        const data = await devLoginAndFetchData(USERNAME, PASSWORD);
+        
+        setQuestions(data.questions);
+        setGenres(data.genres);
+        
+      } catch (error: any) {
+        alert(`Erro ao carregar dados do Backend:\n${error.message || "Verifique se o backend está rodando e se o usuário existe."}`);
       } finally {
         setLoading(false);
       }
     };
 
-    loadData();
+    initData();
   }, []);
 
   const handleAnswerQuestion = (value: number) => {
@@ -82,10 +86,12 @@ export default function QuestionnairePage() {
         answers,
         genre_ids: selectedGenreIds,
       });
-      // Avança para a home/perfil
+      
+      alert("Onboarding enviado com sucesso para o Backend!");
       navigate("/profile"); 
     } catch (error) {
-      console.error("Erro no fluxo:", error);
+      console.error("Erro ao enviar formulário:", error);
+      alert("Erro ao salvar no banco de dados.");
     } finally {
       setLoading(false);
     }
@@ -94,7 +100,10 @@ export default function QuestionnairePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-cinemind-dark flex items-center justify-center">
-        <p className="text-cinemind-white text-xl animate-pulse">Carregando questionário...</p>
+        <div className="text-center">
+          <p className="text-cinemind-white text-xl animate-pulse mb-2">Conectando ao Backend...</p>
+          <p className="text-cinemind-white/50 text-sm">Autenticando usuário de teste...</p>
+        </div>
       </div>
     );
   }
