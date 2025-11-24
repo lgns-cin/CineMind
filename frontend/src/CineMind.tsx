@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
+import Login from "./pages/LoginPage";
+import QuestionnairePage from "./pages/QuestionnairePage"; // Importação nova
 
 /**
  * O componente base renderizado na tela do site.
- *
- * Não deve conter nada além de {@link Route Routes} para componentes de páginas.
  */
 export default function CineMind() {
   return (
-    // todos os div são placeholders
     <Routes>
       <Route
         path="/"
@@ -15,7 +14,11 @@ export default function CineMind() {
       />
       <Route
         path="/login"
-        element={<div data-testid="login-page" />}
+        element={
+          <div data-testid="login-page">
+            <Login />
+          </div>
+        }
       />
       <Route
         path="/signup"
@@ -23,7 +26,11 @@ export default function CineMind() {
       />
       <Route
         path="/questionnaire"
-        element={<div data-testid="questionnaire-page" />}
+        element={
+          // Agora renderizamos a página real mantendo o wrapper para consistência se necessário
+          // O ID data-testid="questionnaire-page" agora está DENTRO de QuestionnairePage.tsx
+          <QuestionnairePage />
+        }
       />
       <Route
         path="/home"
