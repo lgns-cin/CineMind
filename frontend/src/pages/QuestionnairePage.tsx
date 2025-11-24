@@ -88,10 +88,6 @@ export default function QuestionnairePage() {
     }
     */
     setLoading(true);
-    console.log({
-      answers: answers,
-      genre_ids: selectedGenreIds
-    });
 
     await api
       .post("/api/form/", {
@@ -99,7 +95,6 @@ export default function QuestionnairePage() {
         genre_ids: selectedGenreIds
       })
       .then(response => {
-        console.log(response.data);
         localStorage.removeItem(StorageKeys.ONBOARDING_DATA);
         goToHomePage();
       })
