@@ -88,10 +88,14 @@ export default function QuestionnairePage() {
     }
     */
     setLoading(true);
+    console.log({
+      answers: answers,
+      genre_ids: selectedGenreIds
+    });
 
     await api
       .post("/api/form/", {
-        answers,
+        answers: answers,
         genre_ids: selectedGenreIds
       })
       .then(response => {
