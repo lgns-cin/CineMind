@@ -23,7 +23,8 @@ describe("Componente SVGIcon", () => {
 
   test("Chama a função onClick corretamente", async () => {
     // Contador simples
-    let [number, increment] = [0, () => number++];
+    let number = 0;
+    const increment = () => number++;
 
     // Função mock
     const onClick = jest.fn(increment);
