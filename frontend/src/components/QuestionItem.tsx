@@ -1,11 +1,14 @@
-import type { Question } from "../services/onboardingService";
+import type { Question } from "../services/onboarding";
 
 interface QuestionItemProps {
   question: Question;
   onAnswer: (value: number) => void;
 }
 
-export default function QuestionItem({ question, onAnswer }: QuestionItemProps) {
+export default function QuestionItem({
+  question,
+  onAnswer
+}: QuestionItemProps) {
   return (
     <div className="w-full max-w-2xl bg-cinemind-light bg-opacity-50 p-8 rounded-xl shadow-lg border border-cinemind-light border-opacity-30 backdrop-blur-sm animate-fade-in">
       {/* Texto da Pergunta */}
