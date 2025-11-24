@@ -91,7 +91,7 @@ export default function QuestionnairePage() {
 
     await api
       .post("/api/form/", {
-        answers,
+        answers: answers,
         genre_ids: selectedGenreIds
       })
       .then(response => {
