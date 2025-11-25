@@ -46,6 +46,7 @@ export default function Login() {
 
     // Inicia a chamada da API
     setIsLoading(true); // Desabilita o botão de login
+    localStorage.removeItem(StorageKeys.ACCESS_TOKEN);
 
     await api
       .post("/api/login/", {
