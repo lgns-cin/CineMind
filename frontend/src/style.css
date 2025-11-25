@@ -13,4 +13,18 @@
 
   --font-cinemind-sans: "Josefin Sans", sans-serif;
   --font-cinemind-serif: "EB Garamond", serif;
+
+  /* 
+  Animação usada na página Home.
+  cubic-bezier(0.16, 1, 0.3, 1) corresponde à curva OutExpo https://easings.net/#easeOutExpo
+  */
+  --animate-moveout: moveout 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  @keyframes moveout {
+    0% {
+      translate: 0%;
+    }
+    100% {
+      translate: 200%;
+    }
+  }
 }
