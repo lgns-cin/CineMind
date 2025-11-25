@@ -18,7 +18,7 @@ describe("Componente GenreGrid", () => {
     }
   ];
 
-  let selectedIDs: string[] = [];
+  const selectedIDs: string[] = [];
   const onToggle = jest.fn((id: string) => selectedIDs.push(id));
 
   beforeEach(() => {
@@ -39,7 +39,7 @@ describe("Componente GenreGrid", () => {
   });
 
   test("Chama a função onToggle corretamente", async () => {
-    const buttonGenre0 = await screen.findByText("Gênero 0");
+    const buttonGenre0 = await screen.findByText(testGenres[0].name);
     fireEvent.click(buttonGenre0);
 
     // chamou onToggle
@@ -47,6 +47,6 @@ describe("Componente GenreGrid", () => {
 
     // selectedIDs = [] -> ["0"]
     expect(selectedIDs).toHaveLength(1);
-    expect(selectedIDs).toContain("0");
+    expect(selectedIDs).toContain(testGenres[0].id);
   });
 });
