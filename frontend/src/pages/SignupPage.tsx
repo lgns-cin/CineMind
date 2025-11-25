@@ -6,6 +6,13 @@ import EyeIcon from "../assets/EyeIcon";
 import SlashedEyeIcon from "../assets/SlashedEyeIcon";
 import { useNavigate } from "react-router-dom";
 import EnvelopeIcon from "../assets/EnvelopeIcon";
+import {
+  isValidEmail,
+  isValidPassword,
+  isValidUsername
+} from "../utils/validators";
+import api from "../services/api";
+import { StorageKeys } from "../utils/constants";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -13,12 +20,54 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const togglePasswordVisibility = () =>
     setPasswordVisibility(!isPasswordVisible);
 
-  const submitSignupData = () => {};
+  const submitSignupData = async (event: React.FormEvent) => {
+    event.preventDefault(); // impede o recarregamento padrão do form
+    setError(""); // reseta mensagens de erro a cada nova tentativa
+
+    const isPasswordValid = isValidPassword(password);
+    const isUsernameValid = isValidUsername(username);
+    const isEmailValid = isValidEmail(email);
+
+    if (password != confirmedPassword) {
+      setError("A senha confirmada não coincide com a senha dada.");
+      return;
+    }
+
+    if (!isUsernameValid || !isEmailValid || !isPasswordValid) {
+      setError("Usuário, senha ou email inválidos. Verifique as credenciais.");
+      return;
+    }
+
+    setIsLoading(true);
+    localStorage.removeItem(StorageKeys.ACCESS_TOKEN);
+
+    await api
+      .post("/api/register/", {
+        username: username,
+        email: email,
+        password: password
+      })
+      .then(goToLoginPage)
+      .catch(apiError => {
+        if (apiError.response && apiError.response.status === 401) {
+          // Erro 401 (Não autorizado) - Usuário ou senha incorretos
+          setError("Credenciais incorretas. Tente novamente.");
+        } else {
+          // Outro erro (servidor offline, erro 500, etc)
+          setError("Erro ao conectar ao servidor. Tente novamente mais tarde.");
+        }
+        console.error("Erro no cadastro: ", apiError);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   const navigate = useNavigate();
   const goToLoginPage = () => navigate("/login");
@@ -123,11 +172,13 @@ export default function Signup() {
           <input
             type="submit"
             className="
-                col-start-2 row-start-2
-                bg-cinemind-yellow rounded-lg cursor-pointer 
-                text-cinemind-dark text-2xl font-cinemind-sans font-semibold
-              "
-            value="Entrar"
+              col-start-2 row-start-2 px-4 py-1
+              bg-cinemind-yellow rounded-lg cursor-pointer 
+              text-cinemind-dark text-3xl font-cinemind-sans font-semibold
+              disabled:bg-gray-500 disabled:cursor-not-allowed
+            "
+            value={isLoading ? "Entrando..." : "Entrar"} // Muda o texto se estiver carregando
+            disabled={isLoading} // Desabilita o botão se estiver carregando
           />
 
           <button
