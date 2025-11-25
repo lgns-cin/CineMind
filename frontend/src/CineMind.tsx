@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/LoginPage";
-import QuestionnairePage from "./pages/QuestionnairePage"; // Importação nova
 import Signup from "./pages/SignupPage";
+import Questionnaire from "./pages/QuestionnairePage";
 
 /**
  * O componente base renderizado na tela do site.
@@ -43,7 +43,7 @@ export default function CineMind() {
         path="/questionnaire"
         element={
           <div data-testid="questionnaire-page">
-            <QuestionnairePage />
+            <Questionnaire />
           </div>
         }
       />

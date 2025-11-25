@@ -1,5 +1,5 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import QuestionnairePage from "../../src/pages/QuestionnairePage";
+import Questionnaire from "../../src/pages/QuestionnairePage";
 import { render } from "@testing-library/react";
 
 describe("Componente Questionnaire", () => {
@@ -8,10 +8,14 @@ describe("Componente Questionnaire", () => {
       <MemoryRouter initialEntries={["/questionnaire"]}>
         <Routes>
           <Route
+            path="/login"
+            element={<div data-testid="login-page" />}
+          />
+          <Route
             path="/questionnaire"
             element={
               <div data-testid="questionnaire-page">
-                <QuestionnairePage />
+                <Questionnaire />
               </div>
             }
           />

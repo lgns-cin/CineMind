@@ -10,7 +10,7 @@ import {
 import { StorageKeys } from "../utils/constants";
 import api from "../services/api";
 
-export default function QuestionnairePage() {
+export default function Questionnaire() {
   const navigate = useNavigate();
   const goToHomePage = () => navigate("/home");
 
