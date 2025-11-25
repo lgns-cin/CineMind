@@ -39,18 +39,27 @@ export default function Home() {
               w-4/10 h-4/10 left-3/10 top-3/10 absolute 
               bg-cinemind-pink rounded-full 
               fill-none stroke-cinemind-white stroke-1
+              z-10
             "
           />
           {x.map((value, index) => {
             return (
               <button
-                className="w-1/5 h-1/5 left-2/5 top-2/5 absolute rounded-full align-middle text-center"
+                className="
+                  w-1/5 h-1/5 left-2/5 top-2/5 absolute
+                  align-middle text-center z-0
+                "
                 style={{
                   rotate: `${(360 / x.length) * index}deg`
                 }}
               >
                 <p
-                  className="text-cinemind-white font-cinemind-sans text-lg animate-moveout"
+                  className="
+                      w-full h-full flex place-items-center place-content-center
+                    bg-cinemind-blue rounded-full
+                    text-cinemind-white font-cinemind-sans text-lg
+                      animate-moveout
+                    "
                   style={{
                     rotate: `${-(360 / x.length) * index}deg`
                   }}
