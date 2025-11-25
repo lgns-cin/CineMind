@@ -1,5 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/LoginPage";
+import QuestionnairePage from "./pages/QuestionnairePage"; // Importação nova
+
+/**
+ * O componente base renderizado na tela do site.
 
 /**
  * O componente base renderizado na tela do site.
@@ -16,7 +20,6 @@ import Login from "./pages/LoginPage";
  */
 export default function CineMind() {
   return (
-    // todos os div são placeholders
     <Routes>
       <Route
         path="/"
@@ -36,7 +39,11 @@ export default function CineMind() {
       />
       <Route
         path="/questionnaire"
-        element={<div data-testid="questionnaire-page" />}
+        element={
+          <div data-testid="questionnaire-page">
+            <QuestionnairePage />
+          </div>
+        }
       />
       <Route
         path="/home"

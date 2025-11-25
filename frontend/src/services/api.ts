@@ -1,15 +1,17 @@
 import axios from "axios";
+import { StorageKeys } from "../utils/constants";
 
-/*
-Instância centralizada do Axios para chamadas à API CineMind
-O docker-compose.yml nos diz que o backend roda na porta 8000
-É uma boa prática definir a URL base em um único lugar
-*/
 const api = axios.create({
-  baseURL: "http://localhost:8000/"
+  baseURL: "http://localhost:8000/" // Endereço do backend no Docker/Local
 });
 
-// Futuramente, quando tivermos o JWT, podemos configurar ele aqui
-// para ser enviado em todas as requisições
+// Interceptor para adicionar o Token automaticamente em todas as requisições
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem(StorageKeys.ACCESS_TOKEN);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export default api;
