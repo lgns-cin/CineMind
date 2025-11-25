@@ -3,11 +3,12 @@ import SVGIcon, { type IconProps } from "./SVGIcon";
 export default function EnvelopeIcon({
   className = "",
   viewBox = "0 0 24 24",
-  onClick = _ => {}
+  onClick = () => {}
 }: IconProps) {
   return (
     <SVGIcon
       className={className}
+      testID="envelope-icon"
       viewBox={viewBox}
       onClick={onClick}
     >
