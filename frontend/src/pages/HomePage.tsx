@@ -1,6 +1,11 @@
-import ClosedLockIcon from "../assets/ClosedLockIcon";
+import BrainIcon from "../assets/BrainIcon";
+import HomeIcon from "../assets/HomeIcon";
+import LogoutIcon from "../assets/LogoutIcon";
+import ProfileIcon from "../assets/ProfileIcon";
 
 export default function Home() {
+  const condition = true;
+
   const x = [
     "Alegria",
     "Relaxamento",
@@ -27,6 +32,7 @@ export default function Home() {
       >
         CineMind
       </div>
+
       <div
         className="
           flex grow place-content-center-safe place-items-center-safe
@@ -34,13 +40,14 @@ export default function Home() {
         "
       >
         <div className="size-160 relative">
-          <ClosedLockIcon
+          <BrainIcon
             className="
               w-4/10 h-4/10 left-3/10 top-3/10 absolute 
               bg-cinemind-pink rounded-full 
-              fill-none stroke-cinemind-white stroke-1
+              fill-cinemind-white
               z-10
             "
+            viewBox="-32 -32 576 576"
           />
           {x.map((value, index) => {
             return (
@@ -54,12 +61,12 @@ export default function Home() {
                 }}
               >
                 <p
-                  className="
-                      w-full h-full flex place-items-center place-content-center
+                  className={`
+                    w-full h-full flex place-items-center place-content-center
                     bg-cinemind-blue rounded-full
                     text-cinemind-white font-cinemind-sans text-lg
-                      animate-moveout
-                    "
+                    ${condition && "animate-moveout"}
+                  `}
                   style={{
                     rotate: `${-(360 / x.length) * index}deg`
                   }}
@@ -71,12 +78,35 @@ export default function Home() {
           })}
         </div>
       </div>
+
       <div
-        className="flex grow place-content-center-safe place-items-center-safe
-                   row-start-10 row-span-8 col-start-2 w-full h-full
-                  bg-cinemind-pink"
+        className="
+          flex bottom-4 gap-8 p-2 rounded-full overflow-visible relative
+          row-start-10 row-span-1 col-start-2
+          bg-cinemind-light
+        "
       >
-        +
+        <LogoutIcon
+          className="
+            size-12 rounded-full fill-none stroke-cinemind-white stroke-1 
+            bg-cinemind-dark outline-2 outline-cinemind-light
+          "
+          viewBox="-4 -4 32 32"
+        />
+        <HomeIcon
+          className="
+            size-12 rounded-full fill-none stroke-cinemind-white stroke-1 
+            bg-cinemind-dark outline-2 outline-cinemind-light scale-200 
+          "
+          viewBox="-4 -4 32 32"
+        />
+        <ProfileIcon
+          className="
+            size-12 rounded-full fill-none stroke-cinemind-white stroke-1 
+            bg-cinemind-dark
+          "
+          viewBox="-4 -4 32 32"
+        />
       </div>
     </div>
   );
