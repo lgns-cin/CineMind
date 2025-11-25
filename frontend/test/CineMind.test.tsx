@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/react";
 import CineMind from "../src/CineMind";
 import { MemoryRouter } from "react-router-dom";
 
+/* Espiando chamadas a console.warn() */
+jest.spyOn(console, "warn").mockImplementation();
+
 describe("Componente CineMind", () => {
   // mantenha esses dados consistentes com os que estão no componente
   const routesToTestIDs = new Map<string, string>([
@@ -30,12 +33,16 @@ describe("Componente CineMind", () => {
 
       if (exposedRoutes.includes(route)) {
         // A página pode ser visitada
+
         // O ID de teste deve ser o testID
         expect(await screen.findByTestId(testID)).toBeInTheDocument();
       }
 
       if (protectedRoutes.includes(route)) {
         // Você deve ser redirecionado a outra página
+
+        // Deve-se chamar console.warn()
+        expect(console.warn).toHaveBeenCalled();
         // O ID de teste não deve ser o testID
         expect(screen.queryByTestId(testID)).toBeFalsy();
       }
