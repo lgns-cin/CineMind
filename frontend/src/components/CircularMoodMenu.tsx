@@ -24,7 +24,7 @@ export default function CircularMoodMenu({
 
   return (
     <div className={className}>
-      <div className={`size-${size} relative`}>
+      <div className={`size-${size.toString()} relative`}>
         <div onClick={toggle}>{centerIcon}</div>
         {moods.map((mood, index) => {
           return (
