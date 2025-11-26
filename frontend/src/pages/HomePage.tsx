@@ -3,8 +3,29 @@ import BrainIcon from "../assets/BrainIcon";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { StorageKeys } from "../utils/constants";
+import api from "../services/api";
 
 export default function Home() {
+  interface Mood {
+    id: string;
+    name: string;
+  }
+
+  interface Recommendation {
+    id: string;
+    title: string;
+    rank: number;
+    thumbnail_url: null;
+    mood: Mood;
+    synopsis: string;
+    movie_metadata: string;
+  }
+
+  const [moods, setMoods] = useState<Mood[]>([]);
+
+  const [areMoodsVisible, setMoodsVisibility] = useState(false);
+  const toggleMoodsVisibility = () => setMoodsVisibility(!areMoodsVisible);
+
   const navigate = useNavigate();
   useEffect(() => {
     const goToLoginPage = () => navigate("/login");
@@ -15,18 +36,28 @@ export default function Home() {
       goToLoginPage();
       return;
     }
+
+    const fetchMoodsFromAPI = async () => {
+      await api
+        .get("/api/moods/")
+        .then(response => {
+          console.log(response.data);
+          setMoods(response.data);
+        })
+        .catch(error => {
+          console.error("Erro no fetch: ", error);
+        });
+    };
+
+    fetchMoodsFromAPI();
   }, [navigate]);
 
-  const [areMoodsVisible, setMoodsVisibility] = useState(false);
-  const toggleMoodsVisibility = () => setMoodsVisibility(!areMoodsVisible);
-
-  const x = [
-    "Alegria",
-    "Relaxamento",
-    "Tristeza",
-    "Medo/Tensão",
-    "Curiosidade"
-  ];
+  const fetchRecommendations = async (id: string) => {
+    await api.post("/api/recommendations/", { mood_id: id }).then(response => {
+      const recommendations: Recommendation[] = response.data;
+      console.log(recommendations);
+    });
+  };
 
   return (
     <div
@@ -66,7 +97,7 @@ export default function Home() {
             viewBox="-32 -32 576 576"
             onClick={toggleMoodsVisibility}
           />
-          {x.map((value, index) => {
+          {moods.map((mood, index) => {
             return (
               <button
                 className="
@@ -74,8 +105,10 @@ export default function Home() {
                   align-middle text-center z-0
                 "
                 style={{
-                  rotate: `${(360 / x.length) * index}deg`
+                  rotate: `${(360 / moods.length) * index}deg`
                 }}
+                key={index}
+                onClick={() => fetchRecommendations(mood.id)}
               >
                 <p
                   className={`
@@ -85,10 +118,10 @@ export default function Home() {
                     ${areMoodsVisible && "animate-moveout"}
                   `}
                   style={{
-                    rotate: `${-(360 / x.length) * index}deg`
+                    rotate: `${-(360 / moods.length) * index}deg`
                   }}
                 >
-                  {value}
+                  {mood.name}
                 </p>
               </button>
             );
