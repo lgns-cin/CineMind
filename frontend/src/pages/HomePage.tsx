@@ -1,8 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BrainIcon from "../assets/BrainIcon";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
+import { StorageKeys } from "../utils/constants";
 
 export default function Home() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const goToLoginPage = () => navigate("/login");
+    const accessToken = localStorage.getItem(StorageKeys.ACCESS_TOKEN);
+
+    if (!accessToken) {
+      console.warn("Sem token de acesso. Redirecionando para login.");
+      goToLoginPage();
+      return;
+    }
+  }, [navigate]);
+
   const [areMoodsVisible, setMoodsVisibility] = useState(false);
   const toggleMoodsVisibility = () => setMoodsVisibility(!areMoodsVisible);
 
