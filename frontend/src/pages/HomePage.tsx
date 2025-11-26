@@ -70,14 +70,13 @@ export default function Home() {
     >
       <div
         className="
-          flex grow place-content-center-safe place-items-center-safe
+          place-content-center-safe place-items-center-safe
           row-start-1 row-span-1 col-start-2 w-full h-full
           font-cinemind-serif text-cinemind-white text-xl italic text-center
         "
       >
-        Que emoção deseja sentir hoje?
-        <br />
-        Clique no ícone abaixo para ver suas opções.
+        <p>Que emoção deseja sentir hoje?</p>
+        <p>Clique no ícone abaixo para ver suas opções.</p>
       </div>
 
       <div
