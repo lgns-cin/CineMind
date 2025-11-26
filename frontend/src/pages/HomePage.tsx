@@ -13,7 +13,9 @@ import RecommendationPopup from "../components/RecommendationPopup";
 
 export default function Home() {
   const [moods, setMoods] = useState<Mood[]>([]);
-  const [recommendations, setRecommendations] = useState<Recommendation[] | null>(null);
+  const [recommendations, setRecommendations] = useState<
+    Recommendation[] | null
+  >(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -49,11 +51,13 @@ export default function Home() {
       const response = await api.post("/api/recommendations/", { mood_id: id });
       // Assim que a API responde, guardamos os dados e paramos o loading
       setRecommendations(response.data);
-      setIsLoading(false); 
+      setIsLoading(false);
     } catch (error) {
       console.error("Erro ao buscar recomendações:", error);
       setIsLoading(false);
-      alert("Ocorreu um erro ao consultar o oráculo de filmes. Tente novamente.");
+      alert(
+        "Ocorreu um erro ao consultar o oráculo de filmes. Tente novamente."
+      );
     }
   };
 
@@ -71,9 +75,9 @@ export default function Home() {
 
       {/* Componente de Recomendação (aparece quando temos dados e não estamos carregando) */}
       {!isLoading && recommendations && (
-        <RecommendationPopup 
-          recommendations={recommendations} 
-          onClose={() => setRecommendations(null)} 
+        <RecommendationPopup
+          recommendations={recommendations}
+          onClose={() => setRecommendations(null)}
         />
       )}
 
@@ -99,7 +103,7 @@ export default function Home() {
               w-4/10 h-4/10 left-3/10 top-3/10 absolute 
               bg-cinemind-pink rounded-full 
               fill-cinemind-white cursor-pointer
-              z-10 hover:scale-105 transition-transform duration-300 shadow-lg shadow-cinemind-pink/50
+              z-10 hover:scale-105 transition-transform duration-300
             "
             viewBox="-32 -32 576 576"
           />
