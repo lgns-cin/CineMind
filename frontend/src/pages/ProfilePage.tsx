@@ -1,5 +1,3 @@
-// frontend/src/pages/ProfilePage.tsx
-
 import { useEffect, useState } from "react";
 import NavBar, { DEFAULT_NAVBAR_ICONS } from "../components/Navbar";
 import api from "../services/api";
@@ -7,14 +5,19 @@ import type { UserProfile } from "../services/data";
 import HistoryCard from "../components/HistoryCard";
 import { useNavigate } from "react-router-dom";
 import { StorageKeys } from "../utils/constants";
+import BrainIcon from "../assets/BrainIcon";
+import ProfileIcon from "../assets/ProfileIcon";
+
+/**
+ * TODO Trocar ícone do perfil para um UserIcon
+ * TODO Extrair carossel para o seu componente próprio
+ * TODO Limpar mais o código
+ */
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  // Imagem de avatar estática (já que o backend não tem upload de foto ainda)
-  const AVATAR_URL = "https://api.dicebear.com/7.x/notionists/svg?seed=Felix";
 
   useEffect(() => {
     const accessToken = localStorage.getItem(StorageKeys.ACCESS_TOKEN);
@@ -43,86 +46,77 @@ export default function ProfilePage() {
   const historyItems = profile?.history.slice().reverse() || [];
 
   return (
-    <div className="w-screen h-screen bg-linear-to-t from-cinemind-dark to-cinemind-light overflow-hidden flex flex-col">
-      
-      {/* --- Cabeçalho de Perfil --- */}
-      <div className="p-8 pt-12 flex flex-col items-center gap-6 animate-fade-in">
-        <h1 className="text-cinemind-white font-cinemind-serif text-3xl tracking-widest">
+    <div
+      className="
+        w-screen h-screen select-none
+        bg-linear-to-t from-cinemind-dark to-cinemind-light
+        grid grid-rows-10 grid-cols-3
+        place-content-center-safe place-items-center-safe
+      "
+    >
+      <div
+        className="
+          place-content-center-safe place-items-center-safe
+          row-start-1 row-span-2 col-start-2 w-1/2 h-full p-8
+        "
+      >
+        <p className="font-cinemind-sans text-cinemind-white text-6xl font-bold text-center">
           PERFIL
-        </h1>
+        </p>
 
-        <div className="flex flex-col items-center gap-4">
-          {/* Avatar com anéis decorativos */}
-          <div className="relative">
-            <div className="w-28 h-28 rounded-full p-1 bg-gradient-to-tr from-cinemind-pink to-cinemind-yellow">
-              <div className="w-full h-full rounded-full border-4 border-cinemind-dark overflow-hidden bg-cinemind-light">
-                <img
-                  src={AVATAR_URL}
-                  alt="Avatar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
+        <ProfileIcon className="size-24 stroke-cinemind-white fill-transparent" />
 
-          {/* Dados do Usuário */}
-          <div className="text-center space-y-1">
-            {isLoading ? (
-              <div className="h-6 w-32 bg-cinemind-white/10 animate-pulse rounded mx-auto" />
-            ) : (
-              <>
-                <h2 className="text-cinemind-white font-cinemind-serif text-2xl font-bold">
-                  @{profile?.username}
-                </h2>
-                <p className="text-cinemind-white/50 font-cinemind-sans text-sm">
-                  {profile?.email}
-                </p>
-              </>
-            )}
-          </div>
-        </div>
+        <p className="text-cinemind-white font-cinemind-serif text-2xl font-bold">
+          @{profile?.username}
+        </p>
+        <p className="text-cinemind-white font-cinemind-serif italic text-base">
+          {profile?.email}
+        </p>
       </div>
 
-      {/* --- Seção de Histórico (Carrossel) --- */}
-      <div className="flex-grow flex flex-col px-0 py-4 animate-fade-in delay-100 overflow-hidden">
-        <div className="px-6 mb-4 flex items-center gap-3">
-          <div className="w-1 h-6 bg-cinemind-blue rounded-full" />
-          <h3 className="text-cinemind-white font-cinemind-sans text-lg font-bold tracking-wide">
+      <div
+        className="
+          grow place-content-center-safe place-items-center-safe
+          row-start-4 row-span-6 col-start-1 col-span-3 w-full h-full
+          grid grid-rows-3 grid-cols-1 p-8
+        "
+      >
+        <div className="flex items-center row-start-1 col-start-1">
+          <p className="text-cinemind-white font-cinemind-sans text-lg font-bold">
             Histórico de Recomendações
-          </h3>
+          </p>
         </div>
 
-        <div className="flex-grow relative">
+        <div className="flex items-center justify-center col-start-1 row-span-full w-full">
           {isLoading ? (
-            <div className="flex items-center justify-center h-full text-cinemind-white/30 animate-pulse">
+            <p className="flex text-center text-cinemind-white font-cinemind-serif italic">
               Carregando histórico...
-            </div>
+            </p>
           ) : historyItems.length > 0 ? (
-            // Carrossel Horizontal
-            <div className="flex overflow-x-auto gap-4 px-6 pb-8 snap-x snap-mandatory h-full items-center scrollbar-hide">
-              {historyItems.map((item) => (
-                <HistoryCard key={item.id} item={item} />
+            <div className="flex overflow-x-auto gap-4 p-4 snap-center snap-mandatory w-full h-full items-center scrollbar">
+              {historyItems.map(item => (
+                <HistoryCard
+                  key={item.id}
+                  item={item}
+                />
               ))}
-              {/* Espaçador final para não cortar o último item */}
-              <div className="min-w-[20px]" />
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-cinemind-white/40 gap-2 border-t border-cinemind-white/5 bg-cinemind-dark/20 mx-6 rounded-xl">
-              <span className="text-2xl">📭</span>
-              <p>Nenhum filme recomendado ainda.</p>
-            </div>
+            <p className="flex text-center text-cinemind-white font-cinemind-serif italic">
+              Nenhum filme recomendado ainda.
+            </p>
           )}
         </div>
       </div>
 
-      {/* --- Navbar --- */}
-      <div className="p-6 pb-8 bg-gradient-to-t from-cinemind-dark to-transparent z-10">
-        <NavBar
-          className="flex justify-around p-2 bg-cinemind-dark/80 backdrop-blur-md rounded-full border border-cinemind-white/5 shadow-2xl"
-          selectedIcon={2} // Seleciona o ícone de perfil
-          icons={DEFAULT_NAVBAR_ICONS}
-        />
-      </div>
+      <NavBar
+        className="
+          flex bottom-4 gap-8 p-2 rounded-full overflow-visible relative
+          row-start-10 row-span-1 col-start-2
+          bg-cinemind-light
+        "
+        selectedIcon={2}
+      />
     </div>
   );
 }
