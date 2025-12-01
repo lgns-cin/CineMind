@@ -13,9 +13,7 @@ import RecommendationPopup from "../components/RecommendationPopup";
 
 export default function Home() {
   const [moods, setMoods] = useState<Mood[]>([]);
-  const [recommendations, setRecommendations] = useState<
-    Recommendation[] | null
-  >(null);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -45,7 +43,7 @@ export default function Home() {
 
   const handleMoodClick = async (id: string) => {
     setIsLoading(true); // Abre o popup de carregamento
-    setRecommendations(null); // Limpa recomendações anteriores
+    setRecommendations([]); // Limpa recomendações anteriores
 
     try {
       const response = await api.post("/api/recommendations/", { mood_id: id });
@@ -74,10 +72,10 @@ export default function Home() {
       {isLoading && <LoadingPopup />}
 
       {/* Componente de Recomendação (aparece quando temos dados e não estamos carregando) */}
-      {!isLoading && recommendations && (
+      {!isLoading && recommendations.length > 0 && (
         <RecommendationPopup
           recommendations={recommendations}
-          onClose={() => setRecommendations(null)}
+          onClose={() => setRecommendations([])}
         />
       )}
 
