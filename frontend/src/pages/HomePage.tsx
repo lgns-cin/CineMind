@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import BrainIcon from "../assets/BrainIcon";
-import NavBar, { DEFAULT_NAVBAR_ICONS } from "../components/Navbar";
+import NavBar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { StorageKeys } from "../utils/constants";
 import api from "../services/api";
@@ -116,8 +116,6 @@ export default function Home() {
           row-start-10 row-span-1 col-start-2
           bg-cinemind-light
         "
-        selectedIcon={1}
-        icons={DEFAULT_NAVBAR_ICONS}
       />
     </div>
   );

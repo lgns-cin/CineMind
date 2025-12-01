@@ -10,7 +10,7 @@ import ProfileIcon from "../assets/ProfileIcon";
 interface NavBarProps {
   className?: string;
   icons?: () => JSX.Element[];
-  selectedIcon: number;
+  selectedIcon?: number;
 }
 
 /**
