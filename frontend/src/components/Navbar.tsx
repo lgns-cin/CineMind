@@ -22,18 +22,18 @@ interface NavBarProps {
  */
 export const DEFAULT_NAVBAR_ICONS = () => {
   const navigate = useNavigate();
-  
+
   const goToLoginPage = () => navigate("/login");
   const goToHomePage = () => navigate("/home");
   const goToProfilePage = () => navigate("/profile");
-  
+
   const logout = () => {
     localStorage.removeItem(StorageKeys.ACCESS_TOKEN);
     goToLoginPage();
   };
 
   const iconProperties =
-    "size-12 rounded-full fill-none stroke-cinemind-white stroke-1 bg-cinemind-dark outline-2 outline-cinemind-light transition-all duration-300 hover:shadow-lg hover:shadow-cinemind-blue/20";
+    "size-12 rounded-full fill-none stroke-cinemind-white stroke-1 bg-cinemind-dark outline-2 outline-cinemind-light";
   const iconViewBox = "-4 -4 32 32";
 
   return [
@@ -71,9 +71,10 @@ export default function NavBar({
         return (
           <div
             key={index}
-            // Aplica escala maior se for o ícone selecionado
             className={`transition-transform duration-300 ${
-              selectedIcon === index ? "scale-125" : "cursor-pointer hover:scale-110"
+              selectedIcon == index
+                ? "scale-150"
+                : "cursor-pointer hover:scale-120"
             }`}
           >
             {icon}
