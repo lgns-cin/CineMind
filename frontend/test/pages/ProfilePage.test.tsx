@@ -2,7 +2,6 @@ import { act, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import ProfilePage from "../../src/pages/ProfilePage";
 import api from "../../src/services/api";
-import { StorageKeys as KeyType } from "../../src/utils/constants";
 
 /*
     Mocks e Dados de Teste
