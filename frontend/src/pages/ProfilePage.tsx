@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { StorageKeys } from "../utils/constants";
 import BrainIcon from "../assets/BrainIcon";
 import ProfileIcon from "../assets/ProfileIcon";
+import MovieHistory from "../components/MovieHistory";
 
 /**
  * TODO Trocar ícone do perfil para um UserIcon
@@ -87,26 +88,10 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        <div className="flex items-center justify-center col-start-1 row-span-full w-full">
-          {isLoading ? (
-            <p className="flex text-center text-cinemind-white font-cinemind-serif italic">
-              Carregando histórico...
-            </p>
-          ) : historyItems.length > 0 ? (
-            <div className="flex overflow-x-auto gap-4 p-4 snap-center snap-mandatory w-full h-full items-center scrollbar">
-              {historyItems.map(item => (
-                <HistoryCard
-                  key={item.id}
-                  item={item}
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="flex text-center text-cinemind-white font-cinemind-serif italic">
-              Nenhum filme recomendado ainda.
-            </p>
-          )}
-        </div>
+        <MovieHistory
+          className="flex items-center justify-center col-start-1 row-span-full w-full"
+          items={historyItems}
+        />
       </div>
 
       <NavBar
