@@ -20,7 +20,7 @@ interface NavBarProps {
  * 1: Home
  * 2: Profile
  */
-export const DEFAULT_NAVBAR_ICONS = () => {
+const DEFAULT_NAVBAR_ICONS = () => {
   const navigate = useNavigate();
 
   const goToLoginPage = () => navigate("/login");
