@@ -4,14 +4,8 @@ import api from "../services/api";
 import type { UserProfile } from "../services/data";
 import { useNavigate } from "react-router-dom";
 import { StorageKeys } from "../utils/constants";
-import ProfileIcon from "../assets/ProfileIcon";
 import MovieHistory from "../components/MovieHistory";
-
-/**
- * TODO Trocar ícone do perfil para um UserIcon
- * TODO Extrair carossel para o seu componente próprio
- * TODO Limpar mais o código
- */
+import UserIcon from "../assets/UserIcon";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -63,7 +57,7 @@ export default function ProfilePage() {
           PERFIL
         </p>
 
-        <ProfileIcon className="size-24 stroke-cinemind-white fill-transparent" />
+        <UserIcon className="size-24 stroke-cinemind-white fill-transparent" />
 
         <p className="text-cinemind-white font-cinemind-serif text-2xl font-bold">
           @{profile?.username}
