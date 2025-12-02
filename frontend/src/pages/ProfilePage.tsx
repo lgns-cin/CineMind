@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import NavBar, { DEFAULT_NAVBAR_ICONS } from "../components/Navbar";
+import NavBar from "../components/Navbar";
 import api from "../services/api";
 import type { UserProfile } from "../services/data";
-import HistoryCard from "../components/HistoryCard";
 import { useNavigate } from "react-router-dom";
 import { StorageKeys } from "../utils/constants";
-import BrainIcon from "../assets/BrainIcon";
 import ProfileIcon from "../assets/ProfileIcon";
 import MovieHistory from "../components/MovieHistory";
 
