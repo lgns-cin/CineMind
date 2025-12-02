@@ -112,7 +112,7 @@ export default function Login() {
             bg-cinemind-light rounded-lg
             text-cinemind-white text-2xl font-cinemind-serif
           "
-          placeholder="Nome de usuário ou email..."
+          placeholder="Nome de usuário..."
           value={username}
           onChange={event => setUsername(event.currentTarget.value)}
           leftIcon={<UserCredentialsIcon className={baseIconProperties} />}
