@@ -3,7 +3,6 @@ import type { Mood } from "../services/data";
 
 interface CircularMoodMenuProps {
   className?: string;
-  size?: number;
   centerIcon: JSX.Element;
   moods: Mood[];
   onMoodClick?: (
@@ -14,7 +13,6 @@ interface CircularMoodMenuProps {
 
 export default function CircularMoodMenu({
   className = "",
-  size = 160,
   centerIcon = <></>,
   moods = [],
   onMoodClick = () => {}
@@ -24,7 +22,7 @@ export default function CircularMoodMenu({
 
   return (
     <div className={className}>
-      <div className={`size-${size.toString()} relative`}>
+      <div className={`size-160 relative`}>
         <div onClick={toggle}>{centerIcon}</div>
         {moods.map((mood, index) => {
           return (
