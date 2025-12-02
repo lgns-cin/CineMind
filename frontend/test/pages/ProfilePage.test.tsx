@@ -24,8 +24,8 @@ const mockUserProfile = {
   username: "mbcv-dev",
   email: "mbcv@cinemind.com",
   history: [
-    { id: 1, recommendation_text: "Filme A" },
-    { id: 2, recommendation_text: "Filme B" }
+    { id: 1, title: "Filme A" },
+    { id: 2, title: "Filme B" }
   ],
   big_five_score: { O: 0, C: 0, E: 0, A: 0, N: 0 }
 };
