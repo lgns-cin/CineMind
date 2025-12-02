@@ -88,10 +88,16 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        <MovieHistory
-          className="flex items-center justify-center col-start-1 row-span-full w-full"
-          items={historyItems}
-        />
+        {isLoading ? (
+          <p className="flex text-center text-cinemind-white font-cinemind-serif italic">
+            Carregando recomendações...
+          </p>
+        ) : (
+          <MovieHistory
+            className="flex items-center justify-center col-start-1 row-span-full w-full"
+            items={historyItems}
+          />
+        )}
       </div>
 
       <NavBar
