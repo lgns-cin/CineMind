@@ -30,7 +30,7 @@ export default function LoadingPopup() {
         <div className="w-full h-4 bg-cinemind-dark rounded-full overflow-hidden shadow-inner border border-cinemind-white/10">
           {/* Barra Colorida */}
           <div
-            className="h-full bg-gradient-to-r from-cinemind-pink to-cinemind-yellow transition-all duration-200 ease-out"
+            className="h-full bg-linear-to-r from-cinemind-pink to-cinemind-yellow transition-all duration-200 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>

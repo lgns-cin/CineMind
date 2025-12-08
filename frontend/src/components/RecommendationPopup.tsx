@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Recommendation } from "../services/data";
-import SVGIcon from "../assets/SVGIcon";
+import XMarkIcon from "../assets/XMarkIcon";
 
 interface RecommendationPopupProps {
   recommendations: Recommendation[];
@@ -34,9 +34,8 @@ export default function RecommendationPopup({
               className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500"
             />
           ) : (
-            <div className="h-full w-full min-h-[300px] bg-cinemind-dark flex items-center justify-center text-cinemind-white/30 flex-col gap-2">
-              <span className="text-4xl">🎬</span>
-              <span>Sem Imagem</span>
+            <div className="h-full w-full min-h-[300px] bg-cinemind-dark flex items-center justify-center font-cinemind-serif italic text-cinemind-white/30 flex-col gap-2">
+              Imagem não encontrada.
             </div>
           )}
 
@@ -49,40 +48,24 @@ export default function RecommendationPopup({
         {/* Coluna de Detalhes */}
         <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col relative overflow-y-auto">
           {/* Botão Fechar (X) */}
-          <button
+          <XMarkIcon
+            className="size-12 stroke-2 absolute top-6 right-6 stroke-cinemind-white hover:stroke-cinemind-pink transition-colors cursor-pointer p-2"
             onClick={onClose}
-            className="absolute top-6 right-6 text-cinemind-white/40 hover:text-cinemind-pink transition-colors cursor-pointer p-2"
-            title="Fechar Recomendações"
-          >
-            <SVGIcon
-              className="size-8"
-              testID="close-icon"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-                stroke="currentColor"
-                fill="none"
-              />
-            </SVGIcon>
-          </button>
+          />
 
-          <div className="flex-grow flex flex-col justify-center">
+          <div className="flex grow flex-col justify-center">
             <h3 className="text-cinemind-blue font-cinemind-sans font-bold tracking-[0.2em] uppercase text-xs mb-3">
               Sua Vibe: {currentMovie.mood.name}
             </h3>
 
-            <h1 className="text-4xl md:text-5xl text-cinemind-white font-cinemind-serif font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl text-cinemind-white font-cinemind-sans font-bold mb-6 leading-tight">
               {currentMovie.title}
             </h1>
 
             <div className="w-16 h-1 bg-cinemind-pink mb-6 rounded-full"></div>
 
             <div className="prose prose-invert">
-              <p className="text-cinemind-white/90 text-lg md:text-xl font-cinemind-sans leading-relaxed font-light">
+              <p className="text-cinemind-white/90 text-lg md:text-xl font-cinemind-serif italic leading-relaxed font-light">
                 {currentMovie.synopsis ||
                   "Sinopse não disponível para este título."}
               </p>
@@ -102,11 +85,10 @@ export default function RecommendationPopup({
                 px-8 py-3 rounded-full 
                 font-cinemind-sans font-bold text-lg 
                 hover:bg-cinemind-white hover:scale-105 active:scale-95 
-                transition-all duration-300 shadow-lg shadow-cinemind-blue/20
-                cursor-pointer
+                transition-all duration-300 cursor-pointer
               "
             >
-              Próximo Filme →
+              Próximo Filme
             </button>
           </div>
         </div>
