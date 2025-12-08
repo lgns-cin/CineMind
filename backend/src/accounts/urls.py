@@ -1,20 +1,11 @@
 # accounts/urls.py
 
 from django.urls import path
-# --- A LINHA ABAIXO É A CORREÇÃO ---
-from .views import UserCreateView, QuestionListView, SubmitAnswersView, CheckAnswersView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+# Este arquivo é intencionalmente deixado vazio.
+# As rotas foram movidas para o 'cinemind/urls.py' principal
+# para criar a estrutura de API "plana" (flat).
 urlpatterns = [
-    # Rotas de Autenticação
-    path('register/', UserCreateView.as_view(), name='user-register'),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
-    # Rotas do App
-    path('questions/', QuestionListView.as_view(), name='question-list'),
-    path('answers/submit/', SubmitAnswersView.as_view(), name='submit-answers'),
-    path('answers/check/', CheckAnswersView.as_view(), name='check-answers'), # Nova rota
-
-    
+    # As rotas antigas (register, token, questions, answers, etc.)
+    # foram substituídas.
 ]

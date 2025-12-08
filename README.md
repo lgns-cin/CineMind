@@ -9,11 +9,11 @@ O curso requer que equipes formadas aleatoriamente desenvolvam um sistema integr
 
 | Nome                              | GitHub                                             |
 | --------------------------------- | -------------------------------------------------- |
-| Eduardo Henrique Buarque Almeida  |                                                    |
+| Eduardo Henrique Buarque Almeida  | [@ed-henri](https://github.com/ed-henri)           |
 | Felipe de Aquino Mulato           | [@FelipeMulato](https://github.com/FelipeMulato)   |
 | Iury Mikael Sobral dos Santos[^1] | [@LugiaKB](https://github.com/LugiaKB)             |
-| Jonas Manoel Barbosa de Lima      |                                                    |
-| João Victor Cardoso Lopes[^1]     |                                                    |
+| Jonas Manoel Barbosa de Lima      | [@jmbl2-svg](https://github.com/jmbl2-svg)         |
+| João Victor Cardoso Lopes[^1]     | [@jvlopess](https://github.com/jvlopess)           |
 | Luan Gustavo Nogueira de Souza    | [@lgns-cin](https://github.com/lgns-cin)           |
 | Matheus Braglia Cesar Vieira      | [@mbcv-dev](https://github.com/mbcv-dev)           |
 | Willian Neves Rupert Jones        | [@willianrupert](https://github.com/willianrupert) |
@@ -24,7 +24,8 @@ O curso requer que equipes formadas aleatoriamente desenvolvam um sistema integr
 
 1. [Visão Geral](#visão-geral)
 2. [Funcionalidades Técnicas](#funcionalidades-técnicas)
-3. [Como Contribuir](#como-contribuir)
+3. [Documentação Técnica](#documentação-técnica)
+4. [Como Contribuir](#como-contribuir)
 
 ## Visão Geral
 
@@ -58,7 +59,9 @@ A plataforma oferece um questionário para avaliar o perfil do usuário e, com b
 
   - A API é autodocumentada usando [_drf-spectacular_](https://drf-spectacular.readthedocs.io/en/latest), com [_Swagger UI_](https://swagger.io/tools/swagger-ui/) e [_ReDoc_](https://redocly.com).
 
-Verifique os arquivos `README.md` dentro de cada pasta em `services` para mais detalhes sobre estruturas e tecnologias usadas.
+## Documentação Técnica
+
+Verifique os arquivos [`frontend/README.md`](frontend/README.md) e [`backend/README.md`](backend/README.md) para mais detalhes sobre as estruturas e tecnologias usadas para o projeto.
 
 ## Como Contribuir
 

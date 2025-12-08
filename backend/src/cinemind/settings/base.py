@@ -109,13 +109,14 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ =  False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+ROOT_URLCONF = "cinemind.urls"
 
 # Path where `collectstatic` will collect static files for deployment.
 # Set a sensible default so collectstatic runs inside containers during development.
@@ -125,6 +126,13 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# Banco de dados padrão para ambiente de desenvolvimento e testes
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -158,3 +166,12 @@ SIMPLE_JWT = {
 # ATENÇÃO: Isto permitirá que QUALQUER domínio acesse sua API.
 # Use com cuidado e garanta que suas rotas estão devidamente protegidas.
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+# --- CONFIGURAÇÃO DO PROVEDOR DE IA (LLM) ---
+# Define qual provedor de IA será usado no sistema.
+# Opções válidas: 'gemini', 'openai'
+ACTIVE_LLM_PROVIDER = os.getenv('ACTIVE_LLM_PROVIDER', 'gemini')
+
+# Chave de API da OpenAI (necessária se ACTIVE_LLM_PROVIDER = 'openai')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', None)

@@ -6,7 +6,6 @@ services:
     develop:
       watch:
         - action: sync
-          initial_sync: true
           path: ./frontend
           target: /cinemind/frontend
           ignore:
@@ -24,7 +23,6 @@ services:
     develop:
       watch:
         - action: sync
-          initial_sync: true
           path: ./backend
           target: /cinemind/backend
         - action: rebuild

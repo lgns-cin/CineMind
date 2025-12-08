@@ -1,104 +1,170 @@
-# accounts/views.py
+# backend/src/accounts/views.py
 
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from django.db import transaction
+
 from rest_framework import generics, permissions, views, status
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Question, Answer, Profile
-from .serializers import UserSerializer, QuestionSerializer, AnswerSubmissionSerializer
+# Modelos
+from .models import Question, Answer
+from recommendations.models import Genre, ProfileGenre # Importa de 'recommendations'
 
-class UserCreateView(generics.CreateAPIView):
+# Serializers
+from .serializers import (
+    UserSerializer, QuestionSerializer, OnboardingFormSerializer, ProfileSerializer
+)
+from recommendations.serializers import GenreSerializer # Importa de 'recommendations'
+
+# Serviços
+from .services import AccountService
+
+# --- VIEW PARA: POST /api/register/ ---
+
+class RegisterView(generics.CreateAPIView):
     """
-    Endpoint para registrar um novo usuário no sistema.
+    Cria um novo usuário.
+    Substitui: POST /api/accounts/register/
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
 
-class QuestionListView(generics.ListAPIView):
-    """
-    Endpoint para listar todas as perguntas do questionário Big Five.
-    """
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# --- VIEW PARA: POST /api/login/ ---
 
-class CheckAnswersView(views.APIView):
+class LoginOnboardingView(views.APIView):
     """
-    Verifica se o usuário já preencheu o formulário de personalidade.
+    Endpoint complexo de login e onboarding.
+    Autentica, retorna token e verifica se o onboarding é necessário,
+    retornando as perguntas e gêneros se for.
+    
+    Substitui:
+    - POST /api/accounts/token/
+    - GET /api/accounts/questions/
+    - GET /api/accounts/answers/check/
+    - GET /api/recommendations/genres/
+    - GET /api/recommendations/genres/check-favorites/
     """
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        """
-        Retorna {"has_submitted": true} se o usuário já enviou respostas,
-        e {"has_submitted": false} caso contrário.
-        """
-        profile = request.user.profile
-        has_submitted = Answer.objects.filter(profile=profile).exists()
-        return Response({"has_submitted": has_submitted}, status=status.HTTP_200_OK)
-
-class SubmitAnswersView(views.APIView):
-    """
-    Recebe e processa as respostas do questionário de personalidade de um usuário.
-    Calcula os scores do Big Five e os salva no perfil do usuário.
-    """
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = AnswerSubmissionSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
-        profile = request.user.profile
+        # --- ALTERAÇÃO AQUI (1/3) ---
+        # Trocado 'email' por 'username'
+        username = request.data.get('username')
+        password = request.data.get('password')
+        
+        # --- ALTERAÇÃO AQUI (2/3) ---
+        # Atualizada a validação e a mensagem de erro
+        if not username or not password:
+            return Response({"error": "Username e senha são obrigatórios"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # --- ALTERAÇÃO AQUI (3/3) ---
+        # Trocado 'email' por 'username' na função 'authenticate'
+        user = authenticate(request, username=username, password=password)
+        
+        if user is None:
+            return Response({"error": "Credenciais inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # Gerar token
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        
+        # Checagem de Onboarding
+        profile = user.profile
+        # Usamos 'profile.id' para otimizar a consulta
+        has_answers = Answer.objects.filter(profile_id=profile.id).exists()
+        has_genres = ProfileGenre.objects.filter(profile_id=profile.id).exists()
+        
+        # --- ESTA É A MUDANÇA QUE VOCÊ PEDIU ---
+        onboarding_status = None  # 1. Inicializa como None
+        
+        if not (has_answers and has_genres): # 2. Verifica se o onboarding NÃO foi feito
+            # Se o onboarding não foi feito, busca os dados necessários
+            questions = Question.objects.all()
+            genres = Genre.objects.all()
+            # 3. Preenche o dicionário apenas com 'questions' e 'genres'
+            onboarding_status = {
+                'questions': QuestionSerializer(questions, many=True).data,
+                'genres': GenreSerializer(genres, many=True).data,
+            }
+        # --- FIM DA MUDANÇA ---
+
+        return Response({
+            'access_token': access_token,
+            'onboarding_status': onboarding_status
+        }, status=status.HTTP_200_OK)
+
+# --- VIEW PARA: POST /api/form/ ---
+
+class OnboardingFormSubmitView(views.APIView):
+    """
+    Recebe a submissão do formulário de onboarding (respostas + gêneros).
+    
+    Substitui:
+    - POST /api/accounts/answers/submit/
+    - POST /api/recommendations/genres/set-favorites/
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = OnboardingFormSerializer
+    
+    def __init__(self, **kwargs):
+        self.account_service = AccountService()
+        super().__init__(**kwargs)
+
+    def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        profile = request.user.profile
         answers_data = serializer.validated_data['answers']
-        
-        # --- CORREÇÃO 1 ---
-        # Acessa o ID da questão através do dicionário aninhado
-        question_ids = [answer['question']['id'] for answer in answers_data]
-        
-        questions_map = {q.id: q for q in Question.objects.filter(id__in=question_ids)}
-
-        if len(questions_map) != len(answers_data):
-            return Response({"error": "Uma ou mais questões enviadas são inválidas."}, status=status.HTTP_400_BAD_REQUEST)
-
-        scores = {
-            'openness': 0.0, 'conscientiousness': 0.0, 'extraversion': 0.0,
-            'agreeableness': 0.0, 'neuroticism': 0.0,
-        }
-
-        for answer in answers_data:
-            # --- CORREÇÃO 2 ---
-            question = questions_map[answer['question']['id']]
-            scores[question.attribute] += answer['selected_value']
+        genre_ids = serializer.validated_data['genre_ids']
 
         try:
             with transaction.atomic():
-                for answer_data in answers_data:
-                    Answer.objects.update_or_create(
-                        profile=profile,
-                        # --- CORREÇÃO 3 ---
-                        question_id=answer_data['question']['id'],
-                        defaults={'selected_value': answer_data['selected_value']}
-                    )
-
-                profile.openness = scores['openness']
-                profile.conscientiousness = scores['conscientiousness']
-                profile.extraversion = scores['extraversion']
-                profile.agreeableness = scores['agreeableness']
-                profile.neuroticism = scores['neuroticism']
-                profile.save()
-
-        except Exception as e:
-            print(f"Erro ao salvar respostas e perfil: {e}")
+                # 1. Processar e salvar as Respostas (lógica do AccountService)
+                # O 'submit_personality_answers' salva as 'Answer' e calcula os scores
+                self.account_service.submit_personality_answers(
+                    profile=profile,
+                    answers_data=answers_data
+                )
+                
+                # 2. Processar e salvar os Gêneros (lógica da antiga SetFavoriteGenresView)
+                valid_genres = Genre.objects.filter(id__in=genre_ids)
+                if len(valid_genres) != len(genre_ids):
+                    raise ValueError("Um ou mais IDs de gênero são inválidos.")
+                
+                ProfileGenre.objects.filter(profile=profile).delete()
+                profile_genres_to_create = [
+                    ProfileGenre(profile=profile, genre=genre) for genre in valid_genres
+                ]
+                ProfileGenre.objects.bulk_create(profile_genres_to_create)
+            
             return Response(
-                {"error": "Ocorreu um erro ao processar suas respostas."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"message": "Onboarding completado com sucesso!"}, 
+                status=status.HTTP_201_CREATED
             )
 
-        return Response({
-            "message": "Respostas computadas com sucesso!",
-            "scores": scores
-        }, status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(f"Erro inesperado na OnboardingFormSubmitView: {e}")
+            return Response({"error": "Ocorreu um erro inesperado."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# --- VIEW PARA: GET /api/profile/ ---
+
+class ProfileView(generics.RetrieveAPIView):
+    """
+    Endpoint novo. Retorna os dados do perfil do usuário,
+    incluindo seu histórico de recomendações.
+    """
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        # O serializer espera um objeto User
+        # O 'related_name' da 'ShownHistory' é 'history',
+        # então o serializer 'ProfileSerializer' consegue acessá-lo.
+        return self.request.user
