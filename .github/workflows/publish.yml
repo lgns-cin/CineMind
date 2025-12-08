@@ -20,6 +20,10 @@ jobs:
       - name: Checkout @ CineMind
         uses: actions/checkout@v5
 
+      - name: Setup (back-end)
+        working-directory: ./backend
+        run: cat .env.example > .env
+
       - name: Docker Compose
         run: |
           docker compose -p cinemind build
