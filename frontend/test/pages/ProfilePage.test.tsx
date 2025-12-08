@@ -78,7 +78,7 @@ describe("ProfilePage: Testes de Cenário", () => {
     renderProfilePage();
 
     // Logo deve mostrar a mensagem de carregamento
-    expect(screen.getByText("Carregando histórico...")).toBeInTheDocument();
+    expect(screen.getByText("Carregando recomendações...")).toBeInTheDocument();
   });
 
   // Cenário 3: Sucesso no Carregamento com Histórico
@@ -101,7 +101,7 @@ describe("ProfilePage: Testes de Cenário", () => {
     expect(screen.getByText("Filme B")).toBeInTheDocument();
 
     // E o estado de loading deve ser false
-    expect(screen.queryByText("Carregando histórico...")).toBeNull();
+    expect(screen.queryByText("Carregando recomendações...")).toBeNull();
   });
 
   // Cenário 4: Sucesso no Carregamento, Histórico Vazio
@@ -117,10 +117,10 @@ describe("ProfilePage: Testes de Cenário", () => {
 
     // Logo deve mostrar a mensagem de histórico vazio
     expect(
-      screen.getByText("Nenhum filme recomendado ainda.")
+      screen.getByText("Não conseguimos achar nenhuma recomendação ainda.")
     ).toBeInTheDocument();
 
     // E não deve mostrar a mensagem de carregamento
-    expect(screen.queryByText("Carregando histórico...")).toBeNull();
+    expect(screen.queryByText("Carregando recomendações...")).toBeNull();
   });
 });
