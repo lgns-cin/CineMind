@@ -4,6 +4,7 @@ import Signup from "./pages/SignupPage";
 import Questionnaire from "./pages/QuestionnairePage";
 import Home from "./pages/HomePage";
 import Profile from "./pages/ProfilePage";
+import Landing from "./pages/LandingPage";
 
 /**
  * O componente base renderizado na tela do site.
@@ -23,7 +24,11 @@ export default function CineMind() {
     <Routes>
       <Route
         path="/"
-        element={<div data-testid="landing-page" />}
+        element={
+          <div data-testid="landing-page">
+            <Landing />
+          </div>
+        }
       />
       <Route
         path="/login"
