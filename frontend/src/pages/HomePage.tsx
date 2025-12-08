@@ -1,5 +1,3 @@
-// frontend/src/pages/HomePage.tsx
-
 import { useEffect, useState } from "react";
 import BrainIcon from "../assets/BrainIcon";
 import NavBar from "../components/Navbar";
