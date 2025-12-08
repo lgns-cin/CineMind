@@ -1,5 +1,3 @@
-// frontend/src/components/LoadingPopup.tsx
-
 import { useEffect, useState } from "react";
 
 export default function LoadingPopup() {

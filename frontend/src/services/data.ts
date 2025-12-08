@@ -1,5 +1,3 @@
-// frontend/src/services/data.ts
-
 export interface Mood {
   id: string;
   name: string;

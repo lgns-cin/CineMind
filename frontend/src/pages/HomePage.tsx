@@ -68,10 +68,8 @@ export default function Home() {
         place-content-center-safe place-items-center-safe
       "
     >
-      {/* Componente de Carregamento (aparece enquanto isLoading é true) */}
       {isLoading && <LoadingPopup />}
 
-      {/* Componente de Recomendação (aparece quando temos dados e não estamos carregando) */}
       {!isLoading && recommendations.length > 0 && (
         <RecommendationPopup
           recommendations={recommendations}

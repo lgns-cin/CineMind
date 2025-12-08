@@ -10,14 +10,14 @@ import UserCredentialsIcon from "../assets/UserCredentialsIcon";
 import ClosedLockIcon from "../assets/ClosedLockIcon";
 import SlashedEyeIcon from "../assets/SlashedEyeIcon";
 import InputBox from "../components/InputBox";
-import api from "../services/api"; // importação do serviço de API (Axios)
+import api from "../services/api";
 import { StorageKeys } from "../utils/constants";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
-  const [error, setError] = useState(""); // estado que controla mensagens de erro
+  const [error, setError] = useState("");
 
   // Estado de carregamento para UX
   const [isLoading, setIsLoading] = useState(false);

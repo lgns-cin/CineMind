@@ -3,7 +3,7 @@ import Login from "./pages/LoginPage";
 import Signup from "./pages/SignupPage";
 import Questionnaire from "./pages/QuestionnairePage";
 import Home from "./pages/HomePage";
-import ProfilePage from "./pages/ProfilePage"; // <--- Importe da nova página
+import ProfilePage from "./pages/ProfilePage";
 
 /**
  * O componente base renderizado na tela do site.
@@ -18,8 +18,6 @@ import ProfilePage from "./pages/ProfilePage"; // <--- Importe da nova página
  * - `home-page` — Refere ao Home do site, acessível após login.
  * - `profile-page` — Refere à página de perfil do usuário.
  */
-// frontend/src/CineMind.tsx
-
 export default function CineMind() {
   return (
     <Routes>

@@ -1,5 +1,3 @@
-// frontend/src/components/RecommendationPopup.tsx
-
 import { useState } from "react";
 import type { Recommendation } from "../services/data";
 import SVGIcon from "../assets/SVGIcon";
@@ -27,7 +25,6 @@ export default function RecommendationPopup({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-cinemind-dark/95 backdrop-blur-md p-4 animate-fade-in">
       <div className="w-full max-w-5xl bg-cinemind-light rounded-3xl shadow-2xl border border-cinemind-white/10 overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
-        
         {/* Coluna da Imagem (Poster) */}
         <div className="w-full md:w-5/12 bg-black flex items-center justify-center p-0 relative group">
           {currentMovie.thumbnail_url ? (
@@ -51,14 +48,17 @@ export default function RecommendationPopup({
 
         {/* Coluna de Detalhes */}
         <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col relative overflow-y-auto">
-          
           {/* Botão Fechar (X) */}
           <button
             onClick={onClose}
             className="absolute top-6 right-6 text-cinemind-white/40 hover:text-cinemind-pink transition-colors cursor-pointer p-2"
             title="Fechar Recomendações"
           >
-            <SVGIcon className="size-8" testID="close-icon" viewBox="0 0 24 24">
+            <SVGIcon
+              className="size-8"
+              testID="close-icon"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -74,7 +74,7 @@ export default function RecommendationPopup({
             <h3 className="text-cinemind-blue font-cinemind-sans font-bold tracking-[0.2em] uppercase text-xs mb-3">
               Sua Vibe: {currentMovie.mood.name}
             </h3>
-            
+
             <h1 className="text-4xl md:text-5xl text-cinemind-white font-cinemind-serif font-bold mb-6 leading-tight">
               {currentMovie.title}
             </h1>
@@ -83,7 +83,8 @@ export default function RecommendationPopup({
 
             <div className="prose prose-invert">
               <p className="text-cinemind-white/90 text-lg md:text-xl font-cinemind-sans leading-relaxed font-light">
-                {currentMovie.synopsis || "Sinopse não disponível para este título."}
+                {currentMovie.synopsis ||
+                  "Sinopse não disponível para este título."}
               </p>
             </div>
           </div>
