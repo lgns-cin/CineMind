@@ -1,6 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import ProfilePage from "../../src/pages/ProfilePage";
+import Profile from "../../src/pages/ProfilePage";
 import api from "../../src/services/api";
 
 /*
@@ -41,7 +41,7 @@ describe("ProfilePage: Testes de Cenário", () => {
           />
           <Route
             path="/profile"
-            element={<ProfilePage />}
+            element={<Profile />}
           />
         </Routes>
       </MemoryRouter>

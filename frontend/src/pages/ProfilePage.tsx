@@ -7,7 +7,7 @@ import { StorageKeys } from "../utils/constants";
 import MovieHistory from "../components/MovieHistory";
 import UserIcon from "../assets/UserIcon";
 
-export default function ProfilePage() {
+export default function Profile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
