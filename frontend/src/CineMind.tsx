@@ -2,6 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./pages/LoginPage";
 import Signup from "./pages/SignupPage";
 import Questionnaire from "./pages/QuestionnairePage";
+import Home from "./pages/HomePage";
+import Profile from "./pages/ProfilePage";
+import Landing from "./pages/LandingPage";
 
 /**
  * O componente base renderizado na tela do site.
@@ -21,7 +24,11 @@ export default function CineMind() {
     <Routes>
       <Route
         path="/"
-        element={<div data-testid="landing-page" />}
+        element={
+          <div data-testid="landing-page">
+            <Landing />
+          </div>
+        }
       />
       <Route
         path="/login"
@@ -49,11 +56,19 @@ export default function CineMind() {
       />
       <Route
         path="/home"
-        element={<div data-testid="home-page" />}
+        element={
+          <div data-testid="home-page">
+            <Home />
+          </div>
+        }
       />
       <Route
         path="/profile"
-        element={<div data-testid="profile-page" />}
+        element={
+          <div data-testid="profile-page">
+            <Profile />
+          </div>
+        }
       />
     </Routes>
   );

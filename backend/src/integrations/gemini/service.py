@@ -38,6 +38,7 @@ class GeminiService(AbstractLLMService):
                             rank=movie.rank,
                             title=movie.title,
                             year=movie.year,
+                            synopsis=movie.synopsis, # <--- MAPEAMENTO ADICIONADO AQUI
                             reason_for_recommendation=movie.reason_for_recommendation
                         ) for movie in rec.movies
                     ]

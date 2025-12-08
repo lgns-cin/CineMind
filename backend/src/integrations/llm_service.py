@@ -22,6 +22,7 @@ class LLMMovieOutput(BaseModel):
     rank: int
     title: str
     year: int
+    synopsis: str # <--- NOVO CAMPO ADICIONADO
     reason_for_recommendation: str
 
 class LLMMoodRecommendation(BaseModel):
