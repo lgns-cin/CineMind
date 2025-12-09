@@ -2,9 +2,10 @@ import axios from "axios";
 import { StorageKeys } from "../utils/constants";
 
 const api = axios.create({
-  baseURL: import.meta.env.PROD
-    ? import.meta.env.VITE_BACKEND_URL
-    : "http://localhost:8000/"
+  baseURL:
+    process.env.ENVIRONMENT == "production"
+      ? process.env.BACKEND_URL
+      : "http://localhost:8000/"
 });
 
 // Interceptor para adicionar o Token automaticamente em todas as requisições
