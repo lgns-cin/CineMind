@@ -1,4 +1,6 @@
-from .base import MIDDLEWARE, BASE_DIR
+# cinemind/settings/production.py
+
+from .base import *
 import os
 import dj_database_url
 
@@ -9,12 +11,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(' ')
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get('DATABASE_URL', ''),
-        # O que tinha antes:
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL', ''))
 }
 
 # WhiteNoise para arquivos estáticos
