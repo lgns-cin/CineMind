@@ -20,7 +20,7 @@ jobs:
       - name: Checkout @ CineMind
         uses: actions/checkout@v5
 
-      - name: Setup (back-end)
+      - name: Setup (back-end) # feito para que possamos rodar testes finais
         working-directory: ./backend
         run: cat .env.example > .env
 
@@ -51,18 +51,13 @@ jobs:
 
       - name: Tagging
         run: |
-          docker image ls
-          docker tag cinemind-frontend ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:frontend
           docker tag cinemind-backend ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:backend
-          docker tag postgres:15 ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:database
+        # docker tag cinemind-frontend ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:frontend
 
       - name: Pushing
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:frontend
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:backend
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:database
+        # docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cinemind:frontend
 
-      # --- DEPLOYMENT --- #
-      - name: Deploying
-        run: echo TBD
-        # complete aqui
+      # Não estamos usando o Docker para fazer o deployment da aplicação no front-end,
+      # então, comentei para reduzir o tempo de build do back-end.
