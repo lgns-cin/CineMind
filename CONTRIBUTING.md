@@ -6,10 +6,11 @@ Nós agradecemos seu interesse em contribuir! Para garantir que o processo seja 
 
 1. [Guia de Execução e Desenvolvimento](#guia-de-execução-e-desenvolvimento)
 2. [Nosso Fluxo de Colaboração](#nosso-fluxo-de-colaboração)
-3. [Convenções de Nomenclatura](#convenções-de-nomenclatura)
+3. [Builds e Deployment](#builds-e-deployment)
+4. [Convenções de Nomenclatura](#convenções-de-nomenclatura)
    1. [Convenções de Código](#convenções-de-código)
    2. [Convenções de Projeto](#convenções-de-projeto)
-4. [Convenções de Commit](#convenções-de-commit)
+5. [Convenções de Commit](#convenções-de-commit)
 
 ## Guia de Execução e Desenvolvimento
 
@@ -86,6 +87,14 @@ Nós agradecemos seu interesse em contribuir! Para garantir que o processo seja 
     pip install pipenv # Pule este passo se pipenv já estiver instalado
     pipenv install --dev
     ```
+
+## Builds e Deployment
+
+A API/back-end do CineMind tem deploy no serviço Railway, usando a imagem Docker criada no nosso [pipeline CI/CD automatizado](.github/workflows/publish.yml). Fazemos o deploy do front-end diretamente utilizando o Vercel.
+
+Para produção, o front-end executa `npm run build` para buildar o site.
+
+O back-end roda o script [`build.sh`](./backend/build.sh), como no Dockerfile presente no repositório, utilizando Gunicorn: `./build.sh python -m gunicorn cinemind.wsgi:application -b 0.0.0.0:8000 --timeout 120 --chdir ./src`
 
 ## Nosso Fluxo de Colaboração
 
